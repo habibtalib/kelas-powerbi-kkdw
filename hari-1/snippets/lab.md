@@ -65,6 +65,27 @@ Kapasiti Fabric ialah **sumber Azure** (`Microsoft.Fabric/capacities`) — jadi 
 
 > Dalam kelas ini, `az` mengesahkan kapasiti: **SKU F2 · tier Fabric · region malaysiawest** — sepadan dengan skrin di atas.
 
+### Identiti & lesen (Microsoft Entra)
+
+Fabric, Power BI & Copilot semua log masuk melalui **Microsoft Entra ID** (dahulu **Azure AD**) — lapisan identiti/tenant organisasi.
+
+1. **Log masuk dengan akaun dalam tenant yang sama** dengan pemilik workspace. Akaun **guest / tenant lain** selalu gagal akses kapasiti atau Copilot.
+2. **Lesen:** setiap peserta perlu lesen **Power BI (Pro/PPU)** untuk **publish & kongsi** (Hari 2). Kapasiti **Fabric F2+** menampung item Fabric.
+3. **Copilot:** perlu kapasiti **F2+** **DAN** pentadbir tenant dayakan di **Admin portal → Copilot and AI**.
+
+> Peserta biasa **tidak** perlu peranan admin — hanya **akaun tenant + lesen**. Tetapan tenant/Copilot & umpukan lesen dibuat sekali oleh **pentadbir IT KKDW**.
+
+```mermaid
+flowchart LR
+    U["Akaun peserta<br/>(Microsoft Entra)"] --> T{"Dalam tenant<br/>pemilik kapasiti?"}
+    T -->|"Ya + ada lesen"| OK["✅ Akses Fabric,<br/>publish, Copilot (jika On)"]
+    T -->|"Guest / tenant lain"| NO["❌ Tiada akses<br/>kapasiti / Copilot"]
+    classDef ok fill:#3DDC97,color:#111
+    classDef no fill:#E86A6A,color:#111
+    class OK ok
+    class NO no
+```
+
 ### Nota lesen (penting)
 
 - **Fabric penuh + Copilot** perlukan kapasiti **F2+ berbayar** (trial **tidak** termasuk Copilot). Sahkan dengan **pentadbir IT KKDW** sebelum kelas.
