@@ -161,36 +161,29 @@ flowchart TD
 *3) **Workspace type = Fabric** → **Details:** pilih kapasiti Fabric (F2+) → **Apply**. (Nama kapasiti disunting untuk privasi.)*
 ![Create a workspace: Workspace type Fabric + Details kapasiti Fabric (nama kapasiti disunting)](../img/step-w3-fabric-capacity.jpg)
 
-**Kemudian cipta Lakehouse & muat data:**
+**Kemudian cipta Lakehouse, muat fail ke OneLake, & bina Dataflow:**
 
 3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse` *(lihat tangkapan di bawah)*.
-4. **Get data / Upload** 3 fail Excel (`data_jpd.xlsx`, `data_belb.xlsx`, `data_myprojek.xlsx`) ke **Files** *(lihat tangkapan **Get Data → Excel** di bawah)*.
-5. **Muat data ke Lakehouse.**
+4. **`KKDW_Lakehouse` → Files → Upload → Upload files** → muat naik 3 fail: `data_jpd.csv`, `data_belb.csv`, `data_myprojek.csv` *(disediakan pengajar: UTF-8, comma, header)*. *(Tulis ke **OneLake** — tiada lesen OneDrive perlu.)*
+5. **New Dataflow Gen2** (`KKDW_Ingest`) → **baca fail dari Lakehouse Files (OneLake)** *(lihat tangkapan **Dataflow Gen2** di bawah)* — **inilah laluan utama Hari 1**:
+   - **Get data → OneLake data hub** *(atau connector **Lakehouse**)* → pilih **`KKDW_Lakehouse`** → buka **Files** → pilih `data_jpd.csv` *(bukan Tables)*.
+   - CSV: sahkan **Header On · Delimiter comma · Encoding UTF-8** → **Create / Transform data**.
+   - Ulang untuk `data_belb.csv` & `data_myprojek.csv`.
 
-   > ⚠️ **Amaran lesen (PENTING untuk akaun gov/KKDW):** sambungan **Excel** dalam Dataflow Gen2 — **Upload file** *dan* **Link to file / Browse OneDrive/SharePoint** — semuanya melalui **OneDrive for Business**, jadi perlu **lesen OneDrive/SharePoint**. Akaun tanpa lesen dapat ralat:
-   > *"Your account does not have a license for SharePoint Online or OneDrive for Business is not initialized."*
-   > **Lakehouse/OneLake TIDAK perlu lesen OneDrive** — jadi ikut laluan CSV → Lakehouse.
+   > **Kenapa OneLake, bukan Excel Upload/Browse:** sambungan **Excel** Dataflow — **Upload file / Link to file / Browse OneDrive/SharePoint** — melalui **OneDrive for Business** → perlu **lesen**; akaun gov tanpa lesen dapat *"…OneDrive for Business is not initialized."* **Lakehouse/OneLake tidak perlu lesen** — sebab itu kita muat fail ke Lakehouse Files dahulu (langkah 4), kemudian baca dari situ dalam Dataflow.
+6. Dalam Power Query Online, bersih (ikut **Latihan 3**) & **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)* → **Publish** dataflow ke destinasi `KKDW_Lakehouse`.
 
-   **Laluan disyorkan (tiada lesen OneDrive perlu) — CSV → Lakehouse → Load to Tables:**
-   1. Guna 3 CSV **sedia** — `data_jpd.csv`, `data_belb.csv`, `data_myprojek.csv` *(disediakan pengajar: UTF-8, comma, header, `kod_*` sebagai teks — leading zero kekal)*. *(Atau simpan sendiri `xlsx → CSV UTF-8`.)*
-   2. Buka **`KKDW_Lakehouse`** → **Files** → **Upload → Upload files** → pilih 3 CSV. *(Tulis ke OneLake, bukan OneDrive — tiada lesen perlu.)*
-   3. Klik kanan setiap CSV → **Load to Tables → New table**. *(CSV→Delta native; Excel **tidak** boleh Load to Tables.)*
-   4. Jadual muncul di `KKDW_Lakehouse/Tables` → terus guna via **Direct Lake** (langkau Dataflow, teruskan ke Latihan 5 pemodelan).
+   > ⏳ **Jangan tergesa (OneLake *async* — punca utama "data tak load"):**
+   > - Selepas **Upload files**, klik **Refresh** node **Files** sebelum sambung dari Dataflow (senarai fail lambat kemas kini).
+   > - Tunggu **Publish/Refresh** dataflow **"succeeded"** (~10–60s) sebelum semak jadual.
+   > - Sahkan bilangan baris: **JPD ≈ 1,376 · BELB 23 · MyProjek 77**. Jika kosong/salah, **Refresh** **SQL analytics endpoint** (Direct Lake/semantic model lambat sedikit di belakang fail).
+   > - Gejala CSV: semua dalam **satu lajur** = delimiter salah · **header jadi baris 1** = Header off · **teks Melayu rosak** = encoding bukan UTF-8.
 
-   > ⏳ **Jangan tergesa (langkah OneLake *async* — punca utama "data tak load"):**
-   > - Selepas **Upload files**, klik **Refresh** pada node **Files** dahulu (senarai fail lambat kemas kini).
-   > - **Load to Tables** jalankan *job* — tunggu notifikasi **"succeeded"** (~10–60s); jangan buka jadual sebelum siap.
-   > - Dalam dialog Load to Tables sahkan **Header = On**, **Delimiter = comma**, **Encoding = UTF-8** *(penting untuk teks Melayu)* — semak **preview** dahulu.
-   > - Semak bilangan baris: **JPD ≈ 1,376 · BELB 23 · MyProjek 77**. Jika kosong/salah, **Refresh** jadual + **SQL analytics endpoint** (sync Direct Lake/semantic model lambat sedikit di belakang fail).
-   > - Gejala: semua dalam **satu lajur** = delimiter salah · **header jadi baris 1** = Header off · **teks Melayu rosak** = encoding bukan UTF-8.
-
-   **Jika akaun ADA lesen OneDrive** — boleh guna Dataflow Gen2: **Get data → Excel workbook → Upload file** *(lihat tangkapan **Dataflow Gen2** di bawah)* → **Next → Navigator → Sheet1 → Transform data**; ulang untuk 3 fail.
-6. *(Laluan Dataflow sahaja)* Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)*.
-
-> **Alternatif tambahan:**
-> - **Kelas besar / ramai akaun tanpa lesen:** cara paling licin — **pengajar** muat data **sekali** ke satu **Lakehouse / semantic model dikongsi**; pelajar diberi akses (Viewer/Member) dan guna model itu. Tiada muat naik oleh pelajar ⇒ tiada isu lesen.
-> - **Power BI Desktop:** **Get Data → Excel workbook** dari fail tempatan — tiada lesen OneDrive perlu (perlu Windows).
-> - **Lanjutan — OneLake ADLS Gen2** (jika "can't find file path"): letak URL **setakat workspace** lalu **navigate** ke `KKDW_Lakehouse.Lakehouse/Files` (jangan letak nama fail dalam URL); guna **GUID** jika nama ada ruang; Auth **Organizational account**; kemudian `Excel.Workbook([Content], true)` — lihat [`power-query.m`](./power-query.m).
+> **Alternatif (jika perlu):**
+> - **Tanpa Dataflow:** CSV di Lakehouse **Files** → klik kanan → **Load to Tables** (CSV→Delta native; Excel tidak boleh) → guna via **Direct Lake**.
+> - **Ada lesen OneDrive:** Dataflow Gen2 → **Get data → Excel workbook → Upload file** → Navigator → Sheet1.
+> - **Power BI Desktop:** **Get Data → Excel workbook** dari fail tempatan (perlu Windows).
+> - **Kelas besar:** **pengajar** muat **sekali** ke **Lakehouse / semantic model dikongsi**; pelajar guna (Viewer/Member) — tiada muat naik ⇒ tiada isu lesen.
 
 **Tangkapan skrin — Lakehouse & Dataflow:**
 
