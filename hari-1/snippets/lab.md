@@ -177,6 +177,13 @@ flowchart TD
    3. Klik kanan setiap CSV → **Load to Tables → New table**. *(CSV→Delta native; Excel **tidak** boleh Load to Tables.)*
    4. Jadual muncul di `KKDW_Lakehouse/Tables` → terus guna via **Direct Lake** (langkau Dataflow, teruskan ke Latihan 5 pemodelan).
 
+   > ⏳ **Jangan tergesa (langkah OneLake *async* — punca utama "data tak load"):**
+   > - Selepas **Upload files**, klik **Refresh** pada node **Files** dahulu (senarai fail lambat kemas kini).
+   > - **Load to Tables** jalankan *job* — tunggu notifikasi **"succeeded"** (~10–60s); jangan buka jadual sebelum siap.
+   > - Dalam dialog Load to Tables sahkan **Header = On**, **Delimiter = comma**, **Encoding = UTF-8** *(penting untuk teks Melayu)* — semak **preview** dahulu.
+   > - Semak bilangan baris: **JPD ≈ 1,376 · BELB 23 · MyProjek 77**. Jika kosong/salah, **Refresh** jadual + **SQL analytics endpoint** (sync Direct Lake/semantic model lambat sedikit di belakang fail).
+   > - Gejala: semua dalam **satu lajur** = delimiter salah · **header jadi baris 1** = Header off · **teks Melayu rosak** = encoding bukan UTF-8.
+
    **Jika akaun ADA lesen OneDrive** — boleh guna Dataflow Gen2: **Get data → Excel workbook → Upload file** *(lihat tangkapan **Dataflow Gen2** di bawah)* → **Next → Navigator → Sheet1 → Transform data**; ulang untuk 3 fail.
 6. *(Laluan Dataflow sahaja)* Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)*.
 
