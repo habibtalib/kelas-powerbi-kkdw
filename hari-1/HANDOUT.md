@@ -47,8 +47,8 @@ Data mentah (Excel) → dibersih (Power Query) → digabung (Append) → **model
 - [ ] Simpan `hari-1.pbix`
 
 ## 💻 Prasyarat
-- **Laluan A (mana-mana OS):** pelayar → `app.fabric.microsoft.com` → log masuk akaun KKDW → workspace Fabric (F2+).
-- **Laluan B (Windows):** pasang **Power BI Desktop** (percuma, Microsoft Store) → log masuk.
+- **Laluan A — pelayar (WAJIB, mana-mana OS):** `app.fabric.microsoft.com` → log masuk akaun KKDW → workspace Fabric (F2+). **Fabric + Copilot hanya di sini** — boleh buat keseluruhan kursus.
+- **Laluan B — Power BI Desktop (PILIHAN, Windows):** authoring laporan/DAX lebih kaya untuk Hari 2–3. Bukan ganti Fabric/Copilot. macOS → guna Power BI **Service** (pelayar).
 - *Tiada pengalaman pengaturcaraan diperlukan — semua dibina secara visual.*
 
 > Lab penuh langkah demi langkah: **`hari-1/snippets/lab.md`**. Nota konsep: **`hari-1/README.md`**.

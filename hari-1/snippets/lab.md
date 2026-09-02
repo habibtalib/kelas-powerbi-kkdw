@@ -18,17 +18,19 @@ flowchart LR
     class OUT hi
 ```
 
-## Dua laluan — pilih ikut persekitaran
+## Dua laluan — **pelayar (wajib) + Desktop (pilihan)**
 
-| | **Laluan A — Fabric (pelayar)** | **Laluan B — Power BI Desktop** |
+**Laluan A (pelayar) ialah tulang belakang untuk semua** — ia **satu-satunya** tempat untuk **Fabric & Copilot**, dan boleh laksana keseluruhan kursus (Hari 1–3). **Laluan B (Desktop)** cuma alat tambahan untuk authoring Hari 2–3 (Windows), **bukan** ganti Fabric/Copilot.
+
+| | **Laluan A — Fabric (pelayar) · WAJIB** | **Laluan B — Power BI Desktop · PILIHAN** |
 |---|---|---|
-| Alat | Microsoft Fabric di **pelayar** (OneLake, Lakehouse, Dataflow Gen2) | Power BI **Desktop** (aplikasi) |
+| Peranan | Tulang belakang: **Fabric + Copilot + semua Hari 1–3** | Authoring laporan/DAX lebih kaya (Hari 2–3) |
+| Alat | Microsoft Fabric di **pelayar** (OneLake, Lakehouse, Dataflow Gen2, Service, Copilot) | Power BI **Desktop** (aplikasi) |
 | OS | **Mana-mana** (termasuk macOS) | **Windows sahaja** |
-| Perlu Desktop? | **Tidak** | Ya |
-| Tangkapan skrin | disediakan semasa kelas (01–09) | — |
-| Simpan hasil | Jadual Delta dalam Lakehouse + **semantic model** | fail `hari-1.pbix` |
+| Fabric & Copilot? | ✅ **Ya — hanya di sini** | ❌ Tidak (tak boleh cipta Lakehouse/Dataflow; Copilot Fabric di pelayar) |
+| Simpan hasil | Jadual Delta + **semantic model** dalam workspace | fail `hari-1.pbix` |
 
-> **Hari 1 tidak wajib Power BI Desktop.** Persediaan data + model boleh **100% dalam Fabric (pelayar)** — inilah laluan yang dibina untuk kelas ini (lihat model siap `KKDW_Model`). Power BI Desktop (Windows) berguna untuk **laporan/visual & DAX Hari 2–3**; di macOS guna **Power BI Service (pelayar)** sebagai ganti.
+> ⚠️ **Peserta yang guna Desktop sahaja akan terlepas Fabric & Copilot** (objektif teras kursus). **Setiap peserta perlu Laluan A (pelayar).** Di macOS, guna Power BI **Service** (pelayar) untuk authoring Hari 2–3 — bukan Desktop.
 
 ---
 
