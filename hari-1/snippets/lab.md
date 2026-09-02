@@ -189,6 +189,10 @@ Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD
 
 ✅ **Semak:** panel *Applied Steps* menunjukkan setiap langkah; `kategori_status` betul (JPD+BELB: Siap 952 · Dalam Pelaksanaan 425).
 
+**Tangkapan skrin — Power Query (muat naik + transform):** 3 query (JPD/BELB/MyProjek) dari Excel, panel **Applied Steps** (Source → Navigation → Promoted headers → Changed column type), dan destinasi **Lakehouse**.
+
+![Power Query Online: 3 query, Applied Steps, destinasi Lakehouse (data disunting)](../img/step-1-powerquery-transform.jpg)
+
 > **Nota data sebenar:** `lat_1/long_1/lat_2/long_2` wujud tetapi **kosong** dalam sumber — jadi peta Hari 2 ikut **negeri** (bukan titik koordinat).
 
 ---
@@ -242,6 +246,10 @@ flowchart TB
 ```
 
 *Dimensi (biru) → Fakta (emas), hubungan **many-to-one**, penapis **single**.*
+
+**Tangkapan skrin — Model view (KKDW_Model):** 7 jadual + relationships star schema (Projek_Program & MyProjek → Dim_Negeri/Dim_Tarikh/Dim_Agensi).
+
+![Model view KKDW_Model: 7 jadual + relationships star schema](../img/step-2-model-view.jpg)
 
 1. **Jadual dimensi:**
    - **`Dim_Negeri`** — senarai negeri unik (gabungan `kod_negeri` JPD/BELB + `negeri` MyProjek, dinormalkan; mis. `N.SEMBILAN` → `NEGERI SEMBILAN`). 16 negeri.
