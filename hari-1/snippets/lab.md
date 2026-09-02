@@ -150,6 +150,17 @@ flowchart TD
 2. **Name:** `KKDW Copilot` → buka **Advanced** → **License mode: Fabric capacity** → pilih kapasiti **F2+** (mis. Malaysia West) → **Apply** *(skrin 01)*.
    > Perlu peranan **Admin / Member** pada kapasiti. Jika pilihan *Fabric capacity* tiada, minta pentadbir tenant tetapkan (rujuk Latihan 0). Jika workspace sudah wujud, cuma **buka** ia dan teruskan ke langkah 3.
 
+**Tangkapan skrin — cipta workspace:**
+
+*1) Panel **Workspaces → + New workspace**:*
+![Fabric: panel Workspaces dengan butang + New workspace](../img/step-w1-new-workspace.jpg)
+
+*2) Isi **Name** (tunggu "This name is available") → buka **Advanced**:*
+![Create a workspace: Name diisi + Advanced (Contact list, Workspace type)](../img/step-w2-create-workspace.jpg)
+
+*3) **Workspace type = Fabric** → **Details:** pilih kapasiti Fabric (F2+) → **Apply**. (Nama kapasiti disunting untuk privasi.)*
+![Create a workspace: Workspace type Fabric + Details kapasiti Fabric (nama kapasiti disunting)](../img/step-w3-fabric-capacity.jpg)
+
 **Kemudian cipta Lakehouse & muat data:**
 
 3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse` *(skrin 02–03)*.
