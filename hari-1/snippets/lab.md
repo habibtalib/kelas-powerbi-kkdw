@@ -6,6 +6,18 @@ Latihan langkah demi langkah untuk membina **model data bersepadu** JPD + BELB +
 
 > **Peringatan:** kita **belum** bina visual hari ini — fokus data yang **bersih & bermodel**.
 
+### Aliran Hari 1 (gambaran keseluruhan)
+
+```mermaid
+flowchart LR
+    X["3 fail Excel<br/>JPD · BELB · MyProjek"] --> PQ["Power Query<br/>bersih & taip"]
+    PQ --> AP["Append<br/>Projek_Program"]
+    AP --> MD["Model star schema<br/>+ Date table + relationships"]
+    MD --> OUT(["Deliverable Hari 1<br/>model bersepadu"])
+    classDef hi fill:#F2C811,color:#111,stroke:#B8960A
+    class OUT hi
+```
+
 ## Dua laluan — pilih ikut persekitaran
 
 | | **Laluan A — Fabric (pelayar)** | **Laluan B — Power BI Desktop** |
@@ -83,6 +95,18 @@ Kapasiti Fabric ialah **sumber Azure** (`Microsoft.Fabric/capacities`) — jadi 
 
 ## Latihan 2 — Muat Naik 3 Set Data
 
+**Mode sambungan — Import vs DirectQuery vs Direct Lake** (kursus guna **Import**):
+
+```mermaid
+flowchart TD
+    Q{"Saiz & lokasi data?"}
+    Q -->|"Kecil–sederhana<br/>(data KKDW)"| I["Import ✅ pilihan kursus<br/>data dalam .pbix · sangat pantas"]
+    Q -->|"Sangat besar /<br/>masa nyata"| DQ["DirectQuery<br/>tanya terus di sumber"]
+    Q -->|"Sudah dalam<br/>Lakehouse / Warehouse"| DL["Direct Lake (khas Fabric)<br/>laju macam Import · tiada refresh"]
+    classDef pick fill:#F2C811,color:#111,stroke:#B8960A
+    class I pick
+```
+
 ### Laluan A — Fabric (pelayar) · *ikut tangkapan skrin 01–09*
 
 1. Buka **Fabric** → workspace **KKDW Copilot** *(skrin 01)*.
@@ -117,6 +141,15 @@ Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD
    - JIKA `status_pelaksanaan` = `PASCA PELAKSANAAN` → `Siap`
    - JIKA `status_pelaksanaan` = `DALAM PELAKSANAAN` → `Dalam Pelaksanaan`
    - Selainnya → `Belum Mula / Lain`
+
+   ```mermaid
+   flowchart LR
+       S["status_pelaksanaan"] --> C{"Nilai?"}
+       C -->|"PASCA PELAKSANAAN"| A["Siap"]
+       C -->|"DALAM PELAKSANAAN"| B["Dalam Pelaksanaan"]
+       C -->|"lain-lain"| D["Belum Mula / Lain"]
+   ```
+
 6. Ulang langkah 1–5 untuk query **BELB**.
 
 ✅ **Semak:** panel *Applied Steps* menunjukkan setiap langkah; `kategori_status` betul (JPD+BELB: Siap 952 · Dalam Pelaksanaan 425).
@@ -128,6 +161,19 @@ Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD
 ## Latihan 4 — Gabung JPD & BELB → `Projek_Program`
 
 **Tujuan:** satu jadual operasi program (JPD ∪ BELB) untuk KPI gabungan.
+
+```mermaid
+flowchart TB
+    subgraph AP["APPEND — susun baris (struktur sama)"]
+        direction LR
+        J["JPD · 1,376"] --> P["Projek_Program · 1,399"]
+        B["BELB · 23"] --> P
+    end
+    subgraph MG["MERGE — gabung lajur ikut kunci"]
+        direction LR
+        P2["Projek_Program"] -.->|"kod_projek"| M["+ lajur kewangan<br/>dari MyProjek"]
+    end
+```
 
 1. Dalam **JPD**, tambah **Custom Column** `program` = `"JPD"`. Dalam **BELB**, `program` = `"BELB"`.
 2. Pastikan kedua-dua query kongsi lajur sepunya: `program`, `kod_projek`, `nama_projek`, `kos_projek`, `jumlah_projek_peserta`, `kod_negeri`, `status_pelaksanaan`, `kategori_status`, `tahun` (JPD tambah `panjang_jalan`; BELB tambah `nama_kampung`).
@@ -144,6 +190,23 @@ Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD
 ## Latihan 5 — Bina Model Bersepadu (star schema)
 
 **Tujuan:** star schema + Date table + relationships. *(Inilah struktur `KKDW_Model` yang dibina untuk kelas.)*
+
+```mermaid
+flowchart TB
+    DN["Dim_Negeri"]:::dim
+    DT["Dim_Tarikh"]:::dim
+    DA["Dim_Agensi"]:::dim
+    PP["Projek_Program<br/>fakta: kos · panjang · peserta"]:::fact
+    MY["MyProjek<br/>fakta: peruntukan · belanja · % kemajuan"]:::fact
+    DN -->|"kod_negeri"| PP
+    DT -->|"tarikh_tahun"| PP
+    DN -->|"negeri"| MY
+    DA -->|"agensi_pemilik"| MY
+    classDef dim fill:#4AB3E0,color:#111,stroke:#2E7FA6
+    classDef fact fill:#F2C811,color:#111,stroke:#B8960A
+```
+
+*Dimensi (biru) → Fakta (emas), hubungan **many-to-one**, penapis **single**.*
 
 1. **Jadual dimensi:**
    - **`Dim_Negeri`** — senarai negeri unik (gabungan `kod_negeri` JPD/BELB + `negeri` MyProjek, dinormalkan; mis. `N.SEMBILAN` → `NEGERI SEMBILAN`). 16 negeri.
