@@ -1,10 +1,22 @@
 # Hari 1 — Lab Hands-On (SESI 1–5)
 
-Latihan langkah demi langkah untuk membina **model data bersepadu** JPD + BELB + MyProjek. Fail data (JPD/BELB/MyProjek) **disediakan semasa kelas** — *tidak disertakan dalam repo awam ini*. Simpan kerja anda sebagai `hari-1.pbix`.
+Latihan langkah demi langkah untuk membina **model data bersepadu** JPD + BELB + MyProjek. Fail data (JPD/BELB/MyProjek) **disediakan semasa kelas** — *tidak disertakan dalam repo awam ini*.
 
-> 📎 **Rujukan kod:** [`power-query.m`](./power-query.m) — kod M lengkap untuk bersih & gabung data (boleh tampal dalam Advanced Editor, atau ikut GUI di bawah).
+> 📎 **Rujukan kod:** [`power-query.m`](./power-query.m) — kod M untuk bersih & gabung data (tampal dalam Advanced Editor, atau ikut GUI di bawah).
 
-> **Peringatan:** kita **belum** bina visual hari ini — fokus data yang bersih & bermodel.
+> **Peringatan:** kita **belum** bina visual hari ini — fokus data yang **bersih & bermodel**.
+
+## Dua laluan — pilih ikut persekitaran
+
+| | **Laluan A — Fabric (pelayar)** | **Laluan B — Power BI Desktop** |
+|---|---|---|
+| Alat | Microsoft Fabric di **pelayar** (OneLake, Lakehouse, Dataflow Gen2) | Power BI **Desktop** (aplikasi) |
+| OS | **Mana-mana** (termasuk macOS) | **Windows sahaja** |
+| Perlu Desktop? | **Tidak** | Ya |
+| Tangkapan skrin | disediakan semasa kelas (01–09) | — |
+| Simpan hasil | Jadual Delta dalam Lakehouse + **semantic model** | fail `hari-1.pbix` |
+
+> **Hari 1 tidak wajib Power BI Desktop.** Persediaan data + model boleh **100% dalam Fabric (pelayar)** — inilah laluan yang dibina untuk kelas ini (lihat model siap `KKDW_Model`). Power BI Desktop (Windows) berguna untuk **laporan/visual & DAX Hari 2–3**; di macOS guna **Power BI Service (pelayar)** sebagai ganti.
 
 ---
 
@@ -19,8 +31,8 @@ Latihan langkah demi langkah untuk membina **model data bersepadu** JPD + BELB +
 
 | Soalan | Data | Medan |
 |--------|------|-------|
-| Berapa projek lewat? | MyProjek | `peratus_jadual_projek`, `peratus_sebenar_projek` |
-| Peruntukan vs belanja? | MyProjek | `peruntukan_disemak_janm_*`, `belanja_janm_*`, `baki_kos_de` |
+| Berapa projek lewat? | MyProjek | `peratus_jadual_projek`, `peratus_sebenar_projek` *(skala 0–100)* |
+| Peruntukan vs belanja? | MyProjek | `peruntukan_disemak_janm_tahun_1..5`, `belanja_janm_tahun_1..5` |
 | Kos jalan ikut negeri? | JPD | `kos_projek`, `panjang_jalan`, `kod_negeri` |
 
 3. Simpan senarai — ia jadi **panduan** bila kita bina dashboard Hari 2.
@@ -29,74 +41,92 @@ Latihan langkah demi langkah untuk membina **model data bersepadu** JPD + BELB +
 
 ## Latihan 2 — Muat Naik 3 Set Data
 
-1. Buka **Power BI Desktop** → log masuk akaun organisasi KKDW.
-2. **Home → Get Data → Excel workbook** → pilih fail `data_jpd.xlsx` (disediakan semasa kelas).
-3. Dalam Navigator, tanda `Sheet1` → klik **Transform Data** (jangan *Load* terus).
-4. Ulang untuk `data_belb.xlsx` dan `data_myprojek.xlsx`.
-5. Dalam Power Query Editor, **rename** setiap query: `JPD`, `BELB`, `MyProjek`.
+### Laluan A — Fabric (pelayar) · *ikut tangkapan skrin 01–09*
 
-✅ **Semak:** tiga query kelihatan di panel *Queries* sebelah kiri.
+1. Buka **Fabric** → workspace **KKDW Copilot** *(skrin 01)*.
+2. **New item → Lakehouse** → nama `KKDW_Lakehouse` *(skrin 02–03)*.
+3. **Get data / Upload** 3 fail Excel (`data_jpd.xlsx`, `data_belb.xlsx`, `data_myprojek.xlsx`) ke **Files** *(skrin 04)*.
+4. **New Dataflow Gen2** (`KKDW_Ingest`) → **Get data → Excel** → **Browse OneDrive/OneLake** → pilih setiap fail *(skrin 05–07)*.
+5. Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(skrin 08–09)*.
+
+### Laluan B — Power BI Desktop
+
+1. Buka **Power BI Desktop** → log masuk akaun organisasi KKDW.
+2. **Home → Get Data → Excel workbook** → pilih `data_jpd.xlsx`.
+3. Dalam Navigator, tanda `Sheet1` → klik **Transform Data** (jangan *Load* terus).
+4. Ulang untuk `data_belb.xlsx` dan `data_myprojek.xlsx` → rename `JPD`, `BELB`, `MyProjek`.
+
+✅ **Semak:** tiga query kelihatan di panel *Queries*.
 
 ---
 
-## Latihan 3 — Bersihkan Data JPD & BELB
+## Latihan 3 — Bersihkan Data JPD & BELB (Power Query)
 
-Untuk query **JPD**:
+Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD**:
 
-1. **Buang lajur tak perlu:** pilih `created_at`, `updated_at`, `tarikh_upload` → klik kanan → **Remove Columns**.
-2. **Betulkan jenis data:**
-   - `kos_projek`, `panjang_jalan` → **Decimal Number**
+1. **Naikkan header betul:** pastikan baris tajuk sebenar dinaikkan (**Use First Row as Headers**). *Punca #1 ralat "Changed column type" ialah header salah dinaikkan.*
+2. **Buang lajur tak perlu:** `created_at`, `updated_at`, `tarikh_upload` → klik kanan → **Remove Columns**.
+3. **Betulkan jenis data:**
+   - `kos_projek`, `panjang_jalan` → **Whole/Decimal Number**
    - `tahun`, `tahun_mula` → **Whole Number**
-   - `kod_negeri`, `kod_daerah` → **Text**
-3. **Standardkan teks:** pilih `status_pelaksanaan` → **Transform → Format → UPPERCASE**, kemudian **Trim**.
-4. **Conditional Column** (`kategori_status`): **Add Column → Conditional Column**:
+   - `kod_projek`, `kod_negeri`, `kod_daerah`, `kod_parlimen`, `kod_dun` → **Text** *(kekalkan sebagai teks — kod dengan sifar di hadapan akan rosak jika jadi nombor)*
+4. **Standardkan teks:** pilih `kod_negeri`, `status_pelaksanaan` → **Transform → Format → UPPERCASE** + **Trim**.
+5. **Conditional Column** `kategori_status` (**Add Column → Conditional Column**):
    - JIKA `status_pelaksanaan` = `PASCA PELAKSANAAN` → `Siap`
    - JIKA `status_pelaksanaan` = `DALAM PELAKSANAAN` → `Dalam Pelaksanaan`
    - Selainnya → `Belum Mula / Lain`
-5. Ulang langkah 1–4 untuk query **BELB**.
+6. Ulang langkah 1–5 untuk query **BELB**.
 
-✅ **Semak:** panel *Applied Steps* menunjukkan setiap langkah; nilai `kategori_status` betul.
+✅ **Semak:** panel *Applied Steps* menunjukkan setiap langkah; `kategori_status` betul (JPD+BELB: Siap 952 · Dalam Pelaksanaan 425).
 
----
-
-## Latihan 4 — Gabung JPD & BELB
-
-**Tujuan:** satu jadual operasi program (JPD + BELB).
-
-1. Dalam **JPD**, tambah **Custom Column** `program` = `"JPD"`. Dalam **BELB**, tambah `program` = `"BELB"`.
-2. Pastikan kedua-dua query kongsi lajur sepunya: `nama_projek`, `kos_projek`, `kod_negeri`, `kod_daerah`, `status_pelaksanaan`, `kategori_status`, `program`, `tahun`.
-3. **Home → Append Queries → Append Queries as New** → pilih `JPD` + `BELB` → namakan hasil **Projek_Program**.
-4. *(Lanjutan)* untuk kaitkan kewangan: **Merge** `Projek_Program` dengan `MyProjek` guna kunci padanan (`kod_projek` jika sepadan) → kembangkan lajur `kos_keseluruhan`, `peruntukan…`, `belanja…`.
-
-✅ **Semak:** `Projek_Program` mengandungi baris JPD **dan** BELB dengan lajur `program`.
-
-> Klik **Close & Apply** untuk muat ke model.
+> **Nota data sebenar:** `lat_1/long_1/lat_2/long_2` wujud tetapi **kosong** dalam sumber — jadi peta Hari 2 ikut **negeri** (bukan titik koordinat).
 
 ---
 
-## Latihan 5 — Bina Model Bersepadu
+## Latihan 4 — Gabung JPD & BELB → `Projek_Program`
 
-**Tujuan:** star schema + Date table + relationships.
+**Tujuan:** satu jadual operasi program (JPD ∪ BELB) untuk KPI gabungan.
 
-1. **Date table** — **Modeling → New Table**:
-   ```dax
-   Dim_Tarikh =
-   CALENDAR ( DATE ( 2015, 1, 1 ), DATE ( 2030, 12, 31 ) )
-   ```
-   Tambah lajur `Tahun = YEAR ( Dim_Tarikh[Date] )`. Tandakan sebagai **Mark as Date Table**.
-2. **Dimension Negeri** — buat jadual rujukan negeri (dari `kod_negeri` unik + nama negeri). *(Jika hanya ada kod, buat pemetaan ringkas kod→nama.)*
-3. **Relationships** (View → **Model**):
-   - `Projek_Program[kod_negeri]` → `Dim_Negeri[kod_negeri]` (many-to-one)
-   - `Projek_Program[tahun]` → `Dim_Tarikh[Tahun]` (many-to-one)
-4. **Kemas paparan:** sembunyikan lajur teknikal (`id`, kunci) — klik kanan → *Hide*.
+1. Dalam **JPD**, tambah **Custom Column** `program` = `"JPD"`. Dalam **BELB**, `program` = `"BELB"`.
+2. Pastikan kedua-dua query kongsi lajur sepunya: `program`, `kod_projek`, `nama_projek`, `kos_projek`, `jumlah_projek_peserta`, `kod_negeri`, `status_pelaksanaan`, `kategori_status`, `tahun` (JPD tambah `panjang_jalan`; BELB tambah `nama_kampung`).
+3. **Home → Append Queries → Append Queries as New** → pilih `JPD` + `BELB` → namakan hasil **`Projek_Program`**.
+4. *(Untuk time-intelligence)* tambah lajur tarikh `tarikh_tahun` = awal tahun bagi `tahun` (mis. `#date([tahun],1,1)`).
+
+✅ **Semak:** `Projek_Program` = **1,399 baris** (JPD 1,376 + BELB 23) dengan lajur `program`.
+
+> **Laluan A (Fabric):** set **Data destination = `KKDW_Lakehouse`** bagi setiap query → **Publish/Refresh** dataflow. Jadual terbentuk dalam `KKDW_Lakehouse/Tables/dbo/`.
+> **Laluan B (Desktop):** klik **Close & Apply** untuk muat ke model.
+
+---
+
+## Latihan 5 — Bina Model Bersepadu (star schema)
+
+**Tujuan:** star schema + Date table + relationships. *(Inilah struktur `KKDW_Model` yang dibina untuk kelas.)*
+
+1. **Jadual dimensi:**
+   - **`Dim_Negeri`** — senarai negeri unik (gabungan `kod_negeri` JPD/BELB + `negeri` MyProjek, dinormalkan; mis. `N.SEMBILAN` → `NEGERI SEMBILAN`). 16 negeri.
+   - **`Dim_Tarikh`** — Date table 2017–2028. Dalam Desktop: **Modeling → New Table** →
+     ```dax
+     Dim_Tarikh = CALENDAR ( DATE ( 2017, 1, 1 ), DATE ( 2028, 12, 31 ) )
+     ```
+     Tambah `Tahun = YEAR ( Dim_Tarikh[Date] )` → **Mark as Date Table**.
+   - **`Dim_Agensi`** — senarai agensi unik dari `agensi_pemilik` / `agensi_pelaksana_utama` (MyProjek). 15 agensi.
+2. **Relationships** (View → **Model**), semua *many-to-one*, penapis *single*:
+   - `Projek_Program[kod_negeri]` → `Dim_Negeri[kod_negeri]`
+   - `MyProjek[negeri]` → `Dim_Negeri[kod_negeri]`
+   - `MyProjek[agensi_pemilik]` → `Dim_Agensi[agensi]`
+   - `Projek_Program[tarikh_tahun]` → `Dim_Tarikh[Date]`
+3. **Kemas paparan:** sembunyikan lajur teknikal (`id`, kunci) — klik kanan → *Hide*.
 
 ✅ **Semak & simpan:**
 - [ ] `Dim_Tarikh` ditanda sebagai Date Table
-- [ ] Relationships kelihatan sebagai garisan dalam Model view
-- [ ] **File → Save As → `hari-1.pbix`**
+- [ ] 4 relationships kelihatan sebagai garisan dalam Model view
+- [ ] **Laluan A:** semantic model `KKDW_Model` wujud dalam workspace · **Laluan B:** **File → Save As → `hari-1.pbix`**
+
+> **Hasil sebenar kelas:** model DirectLake **`KKDW_Model`** (7 jadual, 4 relationships, 23 measures) telah dibina & diuji — mis. `Jumlah Projek` = 1,399, `% Utilisasi` ≈ 80.5%. Measures dibina Hari 2 (diteruskan semasa kelas).
 
 ---
 
 ## Cabaran (jika ada masa)
 
-Bina **Conditional Column** kedua dalam MyProjek: `bendera_ketidakpadanan` = `"Semak"` jika `belanja` tinggi tetapi `peratus_sebenar_projek` rendah — kita akan guna idea ini pada Hari 3.
+Bina **Conditional Column** kedua dalam MyProjek: `bendera_ketidakpadanan` = `"Semak"` jika `belanja` tinggi tetapi `peratus_sebenar_projek` rendah (ingat: skala **0–100**) — kita akan guna idea ini pada Hari 3 (Risk Score & Early Warning).
