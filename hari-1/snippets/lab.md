@@ -165,32 +165,18 @@ flowchart TD
 
 3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse` *(lihat tangkapan di bawah)*.
 4. **Get data / Upload** 3 fail Excel (`data_jpd.xlsx`, `data_belb.xlsx`, `data_myprojek.xlsx`) ke **Files** *(lihat tangkapan **Get Data → Excel** di bawah)*.
-5. **New Dataflow Gen2** (`KKDW_Ingest`) → sambung ke Excel **dari Lakehouse Files (OneLake)** *(lihat tangkapan **Dataflow Gen2** di bawah)*:
-   - **Get data → Azure Data Lake Storage Gen2** *(bukan Excel "Browse OneDrive/SharePoint" — sambungan itu selalu gagal untuk Excel; ia perlu fail di SharePoint/OneDrive-for-Business + auth organisasi).*
-   - **URL** (folder Files Lakehouse anda):
-     `https://onelake.dfs.fabric.microsoft.com/KKDW Copilot/KKDW_Lakehouse.Lakehouse/Files`
-     *(boleh guna nama **atau** GUID bagi workspace & lakehouse).*
-   - **Authentication: Organizational account** → **Sign in** → **Connect**.
-   - ADLS Gen2 pulangkan senarai fail; pada lajur **Content** (binary) fail `.xlsx`, tambah langkah `Excel.Workbook([Content], true)` → gerudi ke **Sheet1**. Contoh M untuk query **JPD**:
+5. **New Dataflow Gen2** (`KKDW_Ingest`) → **Get data → Excel workbook → Upload file** *(lihat tangkapan **Dataflow Gen2** di bawah)* — **cara paling stabil**:
+   - Dalam *Connect to data source*, pilih **Upload file** *(bukan "Link to file" / "Browse OneDrive/SharePoint")* → seret `data_jpd.xlsx`. Fail dibenam terus dalam dataflow — **tiada laluan, OneLake, atau gateway**.
+   - **Next → Navigator →** tanda **Sheet1 → Create / Transform data**.
+   - Ulang untuk `data_belb.xlsx` & `data_myprojek.xlsx`.
 
-   ```m
-   let
-       // Baca fail dari OneLake (Lakehouse Files) — bukan SharePoint
-       Source = AzureStorage.DataLake(
-           "https://onelake.dfs.fabric.microsoft.com/KKDW Copilot/KKDW_Lakehouse.Lakehouse/Files"
-       ),
-       Fail  = Table.SelectRows(Source, each [Name] = "data_jpd.xlsx"){0}[Content],
-       Book  = Excel.Workbook(Fail, true),
-       Sheet = Book{[Item = "Sheet1", Kind = "Sheet"]}[Data],
-       NaikTajuk = Table.PromoteHeaders(Sheet, [PromoteAllScalars = true])
-   in
-       NaikTajuk
-   ```
-
-   Ulang untuk `data_belb.xlsx` & `data_myprojek.xlsx`.
+   > **Kenapa bukan sambungan lain:** *Browse SharePoint/OneDrive* perlu fail di SharePoint + auth organisasi (selalu gagal); *Azure Data Lake Storage Gen2* pula kerap **"can't find file path"** (format URL OneLake / nama ada ruang / keizinan). **Upload file** mengelak kedua-duanya.
 6. Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)*.
 
-> **Alternatif jika ADLS Gen2 masih rewel:** (a) **Get data → Excel workbook → Upload file** (muat naik fail terus ke dataflow, tiada SharePoint); atau (b) simpan fail sebagai **CSV**, muat naik ke Lakehouse **Files**, kemudian klik kanan CSV → **Load to Tables** (CSV→Delta secara native; Excel **tidak** boleh) → guna via **Direct Lake**.
+> **Alternatif lain (ikut keutamaan):**
+> 1. **Paling kukuh, tanpa Dataflow:** simpan fail sebagai **CSV** → muat naik ke Lakehouse **Files** → klik kanan CSV → **Load to Tables** (CSV→Delta native; Excel **tidak** boleh) → guna terus via **Direct Lake**.
+> 2. **Power BI Desktop:** **Get Data → Excel workbook** dari fail tempatan — paling mudah untuk latihan luar talian.
+> 3. **Lanjutan — OneLake ADLS Gen2** (jika "can't find file path"): dalam **Azure Data Lake Storage Gen2**, letak URL **setakat workspace sahaja** lalu **navigate** ke `KKDW_Lakehouse.Lakehouse/Files` (jangan masukkan nama fail dalam URL); guna **GUID** workspace/lakehouse jika nama ada ruang; Auth **Organizational account**; kemudian `Excel.Workbook([Content], true)` — lihat [`power-query.m`](./power-query.m).
 
 **Tangkapan skrin — Lakehouse & Dataflow:**
 
