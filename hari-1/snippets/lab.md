@@ -20,6 +20,34 @@ Latihan langkah demi langkah untuk membina **model data bersepadu** JPD + BELB +
 
 ---
 
+## Latihan 0 — Persediaan (Setup)
+
+**Tujuan:** pastikan alat sedia sebelum mula. Pilih laluan ikut komputer anda.
+
+### Laluan A — Fabric (pelayar) · mana-mana OS (termasuk macOS)
+
+1. Buka pelayar → **`app.fabric.microsoft.com`** → **Sign in** dengan akaun organisasi KKDW.
+2. Pilih (atau minta pentadbir cipta) **Workspace** jenis Fabric pada kapasiti **F2+** — kursus guna workspace **KKDW Copilot**.
+3. Sahkan anda nampak **New item → Lakehouse / Dataflow Gen2** dalam workspace.
+4. *(Copilot — Hari 3)* sahkan tetapan tenant Copilot **On** — rujuk panduan pentadbir Fabric (disediakan semasa kelas).
+
+### Laluan B — Power BI Desktop · Windows sahaja
+
+1. Pasang **Power BI Desktop** — **Microsoft Store** (cari "Power BI Desktop") atau [powerbi.microsoft.com/desktop](https://powerbi.microsoft.com/desktop/). *Percuma.*
+2. Buka → **Sign in** (kanan atas) dengan akaun organisasi KKDW.
+3. Sahkan **Home → Get Data** berfungsi.
+
+> **macOS tiada Power BI Desktop** — guna **Laluan A**, atau **Power BI Service** (pelayar) untuk laporan Hari 2–3.
+
+### Nota lesen (penting)
+
+- **Fabric penuh + Copilot** perlukan kapasiti **F2+ berbayar** (trial **tidak** termasuk Copilot). Sahkan dengan **pentadbir IT KKDW** sebelum kelas.
+- Jika akses Fabric belum sedia, Hari 1 masih boleh 100% dalam **Power BI Desktop** (Windows).
+
+✅ **Semak:** anda boleh log masuk + buka workspace Fabric (Laluan A) **atau** Power BI Desktop (Laluan B).
+
+---
+
 ## Latihan 1 — Bengkel Soalan Pengurusan
 
 **Tujuan:** faham *kenapa* sebelum *bina*.
