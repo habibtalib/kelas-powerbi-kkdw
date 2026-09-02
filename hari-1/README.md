@@ -109,6 +109,20 @@ Istilah penting:
 - **Dataflows Gen2** — Power Query di awan — transformasi data yang boleh dijadualkan & dikongsi.
 - **Semantic Model** — model data (jadual + relationships + measures) yang jadi sumber laporan.
 
+**Seni bina Fabric (cara data KKDW mengalir):**
+
+```mermaid
+flowchart TB
+    OL[("OneLake<br/>satu tasik data")]
+    subgraph WS["Workspace: KKDW Copilot · kapasiti Fabric F2"]
+        FI["Files<br/>3 fail Excel"] --> DF["Dataflow Gen2<br/>KKDW_Ingest"]
+        DF --> TB["Tables Delta<br/>JPD · BELB · MyProjek<br/>Projek_Program · Dim_*"]
+        TB --> SM["Semantic Model<br/>KKDW_Model"]
+        SM --> RP["Laporan / Dashboard"]
+    end
+    OL -.->|"semua item duduk di OneLake"| WS
+```
+
 > **Nota lesen:** Ciri penuh Fabric (& Copilot) perlukan **Fabric capacity (F64+)** atau tenant Copilot. Untuk kursus, sebahagian latihan boleh dijalankan **100% dalam Power BI Desktop** (percuma) jika akses Fabric belum sedia — sahkan dengan pentadbir IT KKDW.
 
 ### Import vs DirectQuery
@@ -128,7 +142,7 @@ Kerana set data KKDW kecil, kita guna **Import** sepanjang kursus.
 
 ### Menyambung fail Excel
 
-Power BI Desktop → **Get Data → Excel** → pilih fail set data kursus (JPD/BELB/MyProjek — *disediakan semasa kelas*) → pilih `Sheet1` → **Transform Data** (bukan *Load* terus — kita nak bersihkan dahulu di SESI 3).
+Power BI Desktop → **Get Data → Excel** → pilih fail set data kursus (JPD/BELB/MyProjek — disediakan semasa kelas) → pilih `Sheet1` → **Transform Data** (bukan *Load* terus — kita nak bersihkan dahulu di SESI 3).
 
 > 💻 **Lab SESI 2:** [Latihan 2](./snippets/lab.md#latihan-2--muat-naik-3-set-data) — sambung ketiga-tiga fail JPD, BELB & MyProjek.
 
@@ -222,4 +236,4 @@ Anda kini ada **model data bersepadu** JPD + BELB + MyProjek — bersih, bertaip
 - [ ] Relationships dibina (star schema)
 - [ ] Fail disimpan sebagai `hari-1.pbix`
 
-➡️ **Hari 2 & 3** (DAX, visualisasi, dashboard 4 halaman, analitik risiko, Copilot/AI & capstone) diteruskan semasa kelas — tidak disertakan dalam repo awam ini.
+➡️ **Hari 2 & 3** (DAX, visualisasi, dashboard, Copilot/AI) diteruskan semasa kelas — tidak disertakan dalam repo awam ini.
