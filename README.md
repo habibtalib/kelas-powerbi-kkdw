@@ -1,27 +1,36 @@
-# Kelas Power BI · Microsoft Fabric · Copilot — **Hari 1 (Fondasi Data)**
+# Kelas Power BI · Microsoft Fabric · Copilot — KKDW
 
-Bahan pembelajaran **Hari 1** untuk kursus *Visualisasi Data & Dashboard Pintar Berasaskan AI* (**Power BI · Microsoft Fabric · Copilot**) — tema **KKDW Rural Infrastructure Intelligence Dashboard** (projek JPD, BELB & MyProjek).
+Bahan pembelajaran kursus *Visualisasi Data & Dashboard Pintar Berasaskan AI* (**Power BI · Microsoft Fabric · Copilot**, kod **BI-FABRIC-KKDW-101**) untuk **Kementerian Kemajuan Desa dan Wilayah (KKDW)** — tema **KKDW Rural Infrastructure Intelligence Dashboard** (projek JPD, BELB & MyProjek).
 
-> **Nota repo awam ini:** Ini subset **Hari 1 sahaja**. **Set data sebenar tidak disertakan** — ia disediakan semasa kelas. Bahan Hari 2 & 3 (DAX, visualisasi, dashboard, analitik risiko, Copilot/AI, capstone) juga diteruskan semasa kelas.
+> **Nota repo awam ini:** **Set data sebenar tidak disertakan** — ia disediakan semasa kelas. Kandungan terbit setakat ini: **Hari 1 & Hari 2**. Hari 3 (analitik risiko, Copilot/AI, capstone) diteruskan semasa kelas.
 
-## Fokus Hari 1
+## Aliran pembelajaran (tetap)
 
-Bina **fondasi data** sebelum memvisualkan: fahami ekosistem Fabric/Power BI/Copilot, sambung & bersihkan data dengan **Power Query**, integrasikan (Merge/Append), dan bina **model data bersepadu** (star schema + Date table).
-
-Aliran pembelajaran kursus (tetap): **Data → Fabric → Power BI → Analitik → Copilot/AI**. Hari 1 = fondasi data sahaja.
+**Data → Fabric → Power BI → Analitik → Copilot/AI.** Hari 1 = fondasi data · Hari 2 = DAX, visual & dashboard · Hari 3 = analitik risiko & AI.
 
 ## Kandungan
 
-- [`hari-1/README.md`](./hari-1/README.md) — nota kuliah Hari 1 (SESI 1–5)
-- [`hari-1/snippets/lab.md`](./hari-1/snippets/lab.md) — lab hands-on langkah demi langkah
-- [`hari-1/snippets/power-query.m`](./hari-1/snippets/power-query.m) — kod M rujukan (bersih & gabung data)
-- [`nota/`](./nota/) — nota konsep Hari 1 (kenapa Power BI, Fabric/OneLake, Power Query, pemodelan star schema)
+**Hari 1 — Fondasi Data (SESI 1–5)**
+- [`hari-1/README.md`](./hari-1/README.md) — nota kuliah (ekosistem, Fabric, Power Query, integrasi, pemodelan)
+- [`hari-1/snippets/lab.md`](./hari-1/snippets/lab.md) — lab hands-on (workspace → Lakehouse → Dataflow Gen2 → model)
+- [`hari-1/snippets/power-query.m`](./hari-1/snippets/power-query.m) — kod M rujukan
+- [`hari-1/HANDOUT.md`](./hari-1/HANDOUT.md) — edaran peserta
+
+**Hari 2 — Power BI: DAX, Visual & Dashboard (SESI 6–10)**
+- [`hari-2/README.md`](./hari-2/README.md) — nota kuliah (DAX, visual, drill-down, peta, 4 halaman, publish/RLS)
+- [`hari-2/snippets/lab.md`](./hari-2/snippets/lab.md) — lab hands-on (measures, visual, dashboard)
+- [`hari-2/snippets/measures.dax`](./hari-2/snippets/measures.dax) · [`hari-2/snippets/calculated-columns.dax`](./hari-2/snippets/calculated-columns.dax) — DAX rujukan
+
+**Nota konsep**
+- [`nota/`](./nota/) — kenapa Power BI · Fabric/OneLake · Power Query · star schema · DAX asas · tadbir urus & keselamatan
+
+**Aturcara**
 - [`JADUAL.md`](./JADUAL.md) — aturcara penuh kursus (3 hari)
 
 ## Susunan Hari (jadual)
 
-- **Hari 1 · Rabu** — 4.00 petang – 10.00 malam (blok petang–malam)
-- Hari 2 · Khamis — 8.30 pagi – 6.00 petang *(bahan diteruskan semasa kelas)*
+- **Hari 1 · Rabu** — 4.00 petang – 10.00 malam
+- **Hari 2 · Khamis** — 8.30 pagi – 6.00 petang
 - Hari 3 · Jumaat — 8.30 pagi – 12.30 tengah hari *(bahan diteruskan semasa kelas)*
 
 ## Stack

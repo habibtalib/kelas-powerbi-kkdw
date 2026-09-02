@@ -1,0 +1,76 @@
+// measures.dax
+// Sukatan (measures) DAX untuk KKDW Rural Infrastructure Intelligence Dashboard.
+// Cara guna: klik kanan jadual "_Measures" > New measure, kemudian tampal satu sukatan.
+// Andaian model: Projek_Program (JPD ∪ BELB) berkaitan dengan Dim_Negeri, Dim_Tarikh;
+// MyProjek menyimpan medan kewangan & kemajuan.
+//
+// NOTA: medan kewangan MyProjek dipecah ikut tahun (_tahun_1..5). Contoh di bawah
+// guna _tahun_1 untuk ringkas — untuk jumlah keseluruhan, jumlahkan tahun 1..5
+// (lihat "Jumlah Peruntukan (semua tahun)") atau unpivot dahulu di Power Query.
+//
+// ✅ DIBINA & DIUJI: sukatan ini telah dibina dalam model DirectLake **KKDW_Model**
+// (Fabric workspace "KKDW Copilot") dan diuji dengan DAX langsung — mis. Jumlah Projek = 1,399
+// (JPD 1,376 + BELB 23), Projek Siap = 952, % Utilisasi ≈ 80.5%.
+//
+// ⚠️ SKALA: `peratus_jadual_projek`/`peratus_sebenar_projek` ialah 0–100 dalam data sebenar
+// (bukan 0–1) — relevan untuk ambang risiko (lihat hari-3/risk-measures.dax).
+// ⚠️ Time-intelligence: "Belanja YTD" perlukan MyProjek berkait ke Dim_Tarikh. Dalam KKDW_Model,
+// Dim_Tarikh berkait ke Projek_Program sahaja (fakta hanya ada `tahun`), jadi "Projek Tahun Lalu"
+// berfungsi tetapi "Belanja YTD" perlu lajur tarikh pada MyProjek dahulu (penambahbaikan akan datang).
+
+// ---------- Kiraan asas ----------
+
+Jumlah Projek = COUNTROWS ( Projek_Program )
+
+Jumlah Projek JPD = CALCULATE ( [Jumlah Projek], Projek_Program[program] = "JPD" )
+
+Jumlah Projek BELB = CALCULATE ( [Jumlah Projek], Projek_Program[program] = "BELB" )
+
+Jumlah Kos Projek = SUM ( Projek_Program[kos_projek] )
+
+
+// ---------- Status projek ----------
+
+Projek Siap =
+CALCULATE ( [Jumlah Projek], Projek_Program[kategori_status] = "Siap" )
+
+Projek Dalam Pelaksanaan =
+CALCULATE ( [Jumlah Projek], Projek_Program[kategori_status] = "Dalam Pelaksanaan" )
+
+% Siap = DIVIDE ( [Projek Siap], [Jumlah Projek] )
+
+
+// ---------- Kewangan (MyProjek) ----------
+
+Jumlah Peruntukan = SUM ( MyProjek[peruntukan_disemak_janm_tahun_1] )
+
+Jumlah Belanja = SUM ( MyProjek[belanja_janm_tahun_1] )
+
+Baki = [Jumlah Peruntukan] - [Jumlah Belanja]
+
+% Utilisasi = DIVIDE ( [Jumlah Belanja], [Jumlah Peruntukan] )
+
+// Versi jumlah semua tahun (guna bila ingin campur peruntukan 5 tahun)
+Jumlah Peruntukan (semua tahun) =
+    SUM ( MyProjek[peruntukan_disemak_janm_tahun_1] )
+  + SUM ( MyProjek[peruntukan_disemak_janm_tahun_2] )
+  + SUM ( MyProjek[peruntukan_disemak_janm_tahun_3] )
+  + SUM ( MyProjek[peruntukan_disemak_janm_tahun_4] )
+  + SUM ( MyProjek[peruntukan_disemak_janm_tahun_5] )
+
+
+// ---------- Kemajuan ----------
+
+Purata Kemajuan Jadual = AVERAGE ( MyProjek[peratus_jadual_projek] )
+
+Purata Kemajuan Sebenar = AVERAGE ( MyProjek[peratus_sebenar_projek] )
+
+
+// ---------- Kepintaran masa (Time Intelligence) ----------
+// Perlukan jadual Kalendar (Dim_Tarikh) — lihat calculated-columns.dax.
+
+Belanja YTD =
+TOTALYTD ( [Jumlah Belanja], Dim_Tarikh[Date] )
+
+Projek Tahun Lalu =
+CALCULATE ( [Jumlah Projek], DATEADD ( Dim_Tarikh[Date], -1, YEAR ) )

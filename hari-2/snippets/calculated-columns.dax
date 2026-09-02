@@ -1,0 +1,56 @@
+// calculated-columns.dax
+// Lajur terkira (calculated columns) dan jadual Kalendar untuk model data KKDW.
+// Cara guna: Modeling > New column (untuk lajur) atau New table (untuk Kalendar).
+// Nota: kategori_status lebih baik dibina dalam Power Query (lihat power-query.m),
+// tetapi versi DAX di bawah disediakan sebagai rujukan.
+
+// ---------- Lajur terkira dalam "Projek_Program" ----------
+
+// Kategori status ringkas (jika tidak dibina dalam Power Query)
+kategori_status =
+SWITCH (
+    Projek_Program[status_pelaksanaan],
+    "PASCA PELAKSANAAN", "Siap",
+    "DALAM PELAKSANAAN", "Dalam Pelaksanaan",
+    "Belum Mula / Lain"
+)
+
+// Urutan status (untuk "Sort by Column" — susun ikut aliran, bukan A–Z)
+// Selepas cipta: pilih lajur kategori_status > Column tools > Sort by column > Urutan Status
+Urutan Status =
+SWITCH (
+    Projek_Program[kategori_status],
+    "Belum Mula / Lain", 1,
+    "Dalam Pelaksanaan", 2,
+    "Siap", 3,
+    99
+)
+
+
+// ---------- Lajur terkira dalam "MyProjek" ----------
+
+// Varians kemajuan per projek (negatif = lewat)
+Varians Projek =
+MyProjek[peratus_sebenar_projek] - MyProjek[peratus_jadual_projek]
+
+// Bendera ketidakpadanan fizikal vs kewangan (guna dalam analitik Hari 3)
+Bendera Semak =
+VAR Util =
+    DIVIDE ( MyProjek[belanja_janm_tahun_1], MyProjek[peruntukan_disemak_janm_tahun_1] )
+RETURN
+    IF ( Util > MyProjek[peratus_sebenar_projek] + 0.2, "Semak", "Normal" )
+
+
+// ---------- Jadual Kalendar (Modeling > New table) ----------
+// Selepas dicipta: Mark as Date Table, kemudian buat hubungan
+//   Projek_Program[tahun]  →  Dim_Tarikh[Tahun]
+
+Dim_Tarikh =
+ADDCOLUMNS (
+    CALENDAR ( DATE ( 2015, 1, 1 ), DATE ( 2030, 12, 31 ) ),
+    "Tahun", YEAR ( [Date] ),
+    "No Bulan", MONTH ( [Date] ),
+    "Nama Bulan", FORMAT ( [Date], "mmm" ),
+    "Tahun-Bulan", FORMAT ( [Date], "YYYY-MM" ),
+    "Suku Tahun", "S" & ROUNDUP ( MONTH ( [Date] ) / 3, 0 )
+)
