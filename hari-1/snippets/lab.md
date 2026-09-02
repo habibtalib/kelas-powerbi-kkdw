@@ -163,10 +163,21 @@ flowchart TD
 
 **Kemudian cipta Lakehouse & muat data:**
 
-3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse`.
+3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse` *(lihat tangkapan di bawah)*.
 4. **Get data / Upload** 3 fail Excel (`data_jpd.xlsx`, `data_belb.xlsx`, `data_myprojek.xlsx`) ke **Files** *(lihat tangkapan **Get Data → Excel** di bawah)*.
-5. **New Dataflow Gen2** (`KKDW_Ingest`) → **Get data → Excel** → **Browse OneDrive/OneLake** → pilih setiap fail.
+5. **New Dataflow Gen2** (`KKDW_Ingest`) → **Get data → Excel** → **Browse OneDrive/OneLake** → pilih setiap fail *(lihat tangkapan **Dataflow Gen2** di bawah)*.
 6. Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)*.
+
+**Tangkapan skrin — Lakehouse & Dataflow:**
+
+*a) **New item** → cari "Lakehouse" → pilih petak **Lakehouse**:*
+![Fabric New item: petak Lakehouse](../img/step-lh1-new-item.jpg)
+
+*b) Dialog **New Lakehouse**: isi **Name** → **Location** = workspace → **Create**:*
+![New Lakehouse: Name + Location + Create](../img/step-lh2-new-lakehouse.jpg)
+
+*c) **New item** → cari "Dataflow" → pilih **Dataflow Gen2**:*
+![Fabric New item: petak Dataflow Gen2](../img/step-df1-dataflow-gen2.jpg)
 
 ### Laluan B — Power BI Desktop
 
