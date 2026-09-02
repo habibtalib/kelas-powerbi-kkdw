@@ -12,6 +12,10 @@ Latihan membina **KPI (DAX)**, **visual**, **drill-down & peta**, dan **4 halama
 
 Buat setiap measure: **Modeling → New Measure**, tampal, tekan Enter. *(Sesuaikan nama jadual/medan ikut model anda.)*
 
+**Tangkapan skrin — antaramuka penyunting laporan:** panel **Data** (7 jadual model `KKDW_Model`), galeri **Visualizations**, dan kanvas. *(Buat measure: Power BI Desktop → **Modeling → New measure**; Power BI Service → **Open semantic model → New measure**.)*
+
+![Penyunting laporan Power BI: panel Data (7 jadual KKDW_Model), Visualizations, kanvas](../img/step-report-edit.jpg)
+
 ```dax
 Jumlah Projek = COUNTROWS ( Projek_Program )
 ```
@@ -50,6 +54,10 @@ Purata Kemajuan Sebenar = AVERAGE ( MyProjek[peratus_sebenar_projek] )
 5. **Conditional Formatting:** pada visual matriks `% Utilisasi`, **Format → Cell elements → Background color → f(x)** → skala warna (merah = tinggi).
 
 ✅ **Semak:** warna status seragam sepanjang halaman (Hijau=Siap, Kuning=Dalam Pelaksanaan).
+
+**Tangkapan skrin — bar chart `Jumlah Projek` mengikut `kod_negeri`** (X-axis = `kod_negeri`, Y-axis = `Jumlah Projek`; paparan **Focus mode**):
+
+![Bar chart Jumlah Projek ikut negeri dengan field wells X/Y-axis](../img/step-visual-focus.jpg)
 
 ---
 
