@@ -92,3 +92,30 @@ in
 //                   "kos_keseluruhan", "baki_kos_de"})
 // in
 //     Kembang
+
+// ============================================================
+// 5) (Kes khas jabatan akaun) — Gabung banyak fail Excel ikut tahun
+//    Satu fail per tahun (skema sama) dalam SATU folder.
+//    GUI: Get data > Folder > Combine files (Combine & Transform).
+//    Di bawah = versi manual (tanpa fungsi auto-jana):
+// ============================================================
+// let
+//     Source   = Folder.Files("C:\Akaun"),               // atau folder OneLake/Lakehouse Files
+//     HanyaXlsx = Table.SelectRows(Source, each [Extension] = ".xlsx"
+//                    and not Text.StartsWith([Name], "~$")),
+//     // Buka setiap workbook -> ambil Sheet1
+//     Buka  = Table.AddColumn(HanyaXlsx, "Sheet1", each
+//                 Table.SelectRows(Excel.Workbook([Content], true),
+//                     each [Kind] = "Sheet"){0}[Data]),
+//     // Bawa nama fail supaya boleh ekstrak tahun
+//     TahunDr = Table.AddColumn(Buka, "tahun", each
+//                 try Number.From(Text.Middle([Name],
+//                     Text.PositionOf([Name], "_") + 1, 4)) otherwise null,
+//                 Int64.Type),
+//     Gabung   = Table.Combine(
+//                 Table.AddColumn(TahunDr, "WithYear", each
+//                     Table.AddColumn([Sheet1], "tahun", (_)=> [tahun]))[WithYear]),
+//     NaikTajuk = Table.PromoteHeaders(Gabung, [PromoteAllScalars = true])
+// in
+//     NaikTajuk
+// Tip: cara paling mudah = butang "Combine files" pada lajur Content (auto-jana fungsi).

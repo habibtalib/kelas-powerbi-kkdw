@@ -308,6 +308,23 @@ Medan kewangan MyProjek dipecah *wide* (`..._tahun_1` … `..._tahun_5`). Untuk 
 
 > **Enable load:** query perantara (mis. senarai negeri mentah) boleh dimatikan — klik kanan query → nyahtanda **Enable load** — supaya ia bukan jadual berasingan dalam model.
 
+### 4D (Kes khas — jabatan akaun) — Gabung banyak fail Excel ikut tahun
+
+**Senario:** data yang **sama** tetapi dipecah **satu fail Excel per tahun** (mis. `belanja_2021.xlsx`, `belanja_2022.xlsx`, `belanja_2023.xlsx` — skema/lajur sama). Jangan buka satu-satu — guna **Combine files from folder** (append automatik).
+
+1. **Susun** semua fail dalam **satu folder**: Lakehouse **Files** (mis. `Files/akaun/`) atau folder tempatan (mis. `C:\Akaun\`).
+2. **Get data → Folder** (Power BI Desktop) atau sambung folder **OneLake / Lakehouse Files** (Fabric) → pilih folder itu.
+3. Power Query papar senarai fail (lajur `Name`, `Extension`, `Folder Path`, **`Content`**). **Tapis** `Extension` = `.xlsx` dan buang fail sementara (`~$…`).
+4. Klik ikon **Combine files** (dua anak panah ⤓ pada lajur **`Content`**) → **Combine & Transform Data** → pilih **`Sheet1`** → **OK**.
+   *Power Query auto-jana:* `Sample File` + fungsi **Transform File** + query gabungan — **semua baris semua tahun ditindan jadi satu jadual**.
+5. **Ambil tahun dari nama fail:** pada lajur **`Source.Name`**, **Add Column → Column From Examples** (atau **Extract / Split** ikut `_`/`.`) → lajur **`tahun`** (4 digit) → jenis **Whole Number**.
+6. Bersih & set jenis data seperti **Latihan 3** (Promote Headers, jenis, Trim/UPPERCASE).
+
+✅ **Semak:** bilangan baris = jumlah semua fail; lajur `tahun` betul; satu baris = satu rekod × tahun.
+
+> **Kelebihan:** tambah fail tahun baharu ke folder → cuma **Refresh**; Power Query gabung fail baharu automatik (tak perlu ulang langkah).
+> **Alternatif (sedikit fail):** muat setiap fail sebagai query berasingan → **Append Queries as New** (seperti Latihan 4). Kod M rujukan: [`power-query.m`](./power-query.m).
+
 ---
 
 ## Latihan 5 — Bina Model Bersepadu (star schema)
