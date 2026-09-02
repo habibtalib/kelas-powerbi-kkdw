@@ -39,12 +39,26 @@ Latihan langkah demi langkah untuk membina **model data bersepadu** JPD + BELB +
 
 > **macOS tiada Power BI Desktop** — guna **Laluan A**, atau **Power BI Service** (pelayar) untuk laporan Hari 2–3.
 
+### Sahkan kapasiti Fabric (= kapasiti Azure)
+
+Kapasiti Fabric ialah **sumber Azure** (`Microsoft.Fabric/capacities`) — jadi "setup Fabric" dan "setup Azure" merujuk kapasiti yang sama. Sahkan langkah demi langkah:
+
+1. Dalam workspace → **Workspace settings** (kanan atas).
+2. Klik tab **Workspace type**.
+3. Sahkan: **Current workspace type = Fabric**, **SKU: F2**, **Region: Malaysia West**.
+
+![Workspace settings → Workspace type: Fabric, SKU F2, Region Malaysia West (nama kapasiti & Capacity ID disunting)](../img/setup-fabric-capacity.jpg)
+
+4. *(Pentadbir)* Sahkan sumber di **Azure portal → Microsoft Fabric → Capacities**: status **Active**, **F2**, **Malaysia West**. *(Nama kapasiti & Capacity ID disunting dalam gambar untuk privasi.)*
+
+> Dalam kelas ini, `az` mengesahkan kapasiti: **SKU F2 · tier Fabric · region malaysiawest** — sepadan dengan skrin di atas.
+
 ### Nota lesen (penting)
 
 - **Fabric penuh + Copilot** perlukan kapasiti **F2+ berbayar** (trial **tidak** termasuk Copilot). Sahkan dengan **pentadbir IT KKDW** sebelum kelas.
 - Jika akses Fabric belum sedia, Hari 1 masih boleh 100% dalam **Power BI Desktop** (Windows).
 
-✅ **Semak:** anda boleh log masuk + buka workspace Fabric (Laluan A) **atau** Power BI Desktop (Laluan B).
+✅ **Semak:** anda boleh log masuk + buka workspace Fabric (Laluan A) **atau** Power BI Desktop (Laluan B), dan kapasiti = **Fabric F2, Malaysia West**.
 
 ---
 
