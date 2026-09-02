@@ -169,13 +169,22 @@ flowchart TD
 
 Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD**:
 
-1. **Naikkan header betul:** pastikan baris tajuk sebenar dinaikkan (**Use First Row as Headers**). *Punca #1 ralat "Changed column type" ialah header salah dinaikkan.*
+> **Konsep — Query sebagai resipi:** setiap query ialah senarai **Applied Steps** (auto-jana: *Source → Navigation → Promoted headers → Changed Type*). Klik mana-mana langkah untuk lihat data pada peringkat itu — boleh edit, susun semula, atau buang (**X**). Di sebalik tabir, setiap langkah = satu baris kod **M**; satu **Refresh** jalankan semula **semua** langkah automatik. Sebab itu kita bersih di sini, **bukan** dalam Excel.
+
+1. **Naikkan header betul:** pastikan baris tajuk sebenar dinaikkan (**Home → Use First Row as Headers**). *Punca #1 ralat "Changed column type" ialah header salah dinaikkan.*
 2. **Buang lajur tak perlu:** `created_at`, `updated_at`, `tarikh_upload` → klik kanan → **Remove Columns**.
-3. **Betulkan jenis data:**
-   - `kos_projek`, `panjang_jalan` → **Whole/Decimal Number**
-   - `tahun`, `tahun_mula` → **Whole Number**
-   - `kod_projek`, `kod_negeri`, `kod_daerah`, `kod_parlimen`, `kod_dun` → **Text** *(kekalkan sebagai teks — kod dengan sifar di hadapan akan rosak jika jadi nombor)*
-4. **Standardkan teks:** pilih `kod_negeri`, `status_pelaksanaan` → **Transform → Format → UPPERCASE** + **Trim**.
+3. **Betulkan jenis data** — klik ikon jenis di kiri setiap nama lajur:
+
+   | Lajur | Jenis data | Kenapa |
+   |---|---|---|
+   | `kod_projek`, `kod_program`, `kod_negeri`, `kod_daerah`, `kod_parlimen`, `kod_dun` | **Text** | kod dengan sifar di hadapan rosak jika jadi nombor |
+   | `nama_projek`, `status_pelaksanaan`, `jenis_projek` | **Text** | label / teks |
+   | `kos_projek` | **Currency** (Fixed decimal) | nilai RM |
+   | `panjang_jalan`, `jumlah_projek_peserta` | **Whole/Decimal Number** | untuk KPI (mis. Kos per KM) |
+   | `tahun`, `tahun_mula` | **Whole Number** | untuk Date table & time-intelligence |
+
+   > **Penting:** jika `tahun` / medan tarikh kekal *Text*, fungsi tarikh & time-intelligence (Hari 2) **tak berfungsi**.
+4. **Standardkan teks:** pilih `kod_negeri`, `status_pelaksanaan` (tahan **Ctrl** untuk pilih berbilang) → **Transform → Format → UPPERCASE** + **Trim** *(elak "SABAH " vs "SABAH" dikira dua kategori)*.
 5. **Conditional Column** `kategori_status` (**Add Column → Conditional Column**):
    - JIKA `status_pelaksanaan` = `PASCA PELAKSANAAN` → `Siap`
    - JIKA `status_pelaksanaan` = `DALAM PELAKSANAAN` → `Dalam Pelaksanaan`
@@ -190,6 +199,8 @@ Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD
    ```
 
 6. Ulang langkah 1–5 untuk query **BELB**.
+7. **Semak kualiti data (Data Profiling):** hidupkan **View → Column quality · Column distribution · Column profile** — kesan *null*, ralat, & bilangan nilai unik sebelum teruskan (mis. berapa negeri unik dalam `kod_negeri`).
+8. **Lihat kod M penuh:** **Home → Advanced Editor** — setiap langkah GUI di atas = satu baris **M**. Rujukan siap-tampal (boleh salin ke Advanced Editor): [`power-query.m`](./power-query.m).
 
 ✅ **Semak:** panel *Applied Steps* menunjukkan setiap langkah; `kategori_status` betul (JPD+BELB: Siap 952 · Dalam Pelaksanaan 425).
 
@@ -204,6 +215,8 @@ Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD
 ## Latihan 4 — Gabung JPD & BELB → `Projek_Program`
 
 **Tujuan:** satu jadual operasi program (JPD ∪ BELB) untuk KPI gabungan.
+
+> **Konsep — gabung & bentuk data:** **Append** = tindan **baris** (JPD + BELB → `Projek_Program`, struktur sama); **Merge** = cantum **lajur** ikut kunci sepadan (seperti VLOOKUP / SQL JOIN — bawa kewangan MyProjek ikut `kod_projek`); **Unpivot** = tukar data *wide* (satu lajur per tahun) → *long* (satu baris = projek × tahun) supaya mudah dijumlah & ditapis ikut tahun.
 
 ```mermaid
 flowchart TB
@@ -227,6 +240,27 @@ flowchart TB
 
 > **Laluan A (Fabric):** set **Data destination = `KKDW_Lakehouse`** bagi setiap query → **Publish/Refresh** dataflow. Jadual terbentuk dalam `KKDW_Lakehouse/Tables/dbo/`.
 > **Laluan B (Desktop):** klik **Close & Apply** untuk muat ke model.
+
+### 4B (Lanjutan) — Merge: bawa kewangan MyProjek
+
+Untuk laporan Kewangan (Hari 2), cantum medan kewangan MyProjek ke `Projek_Program`:
+
+1. **Home → Merge Queries** (bukan *as New* jika mahu ubah `Projek_Program` terus).
+2. Jadual atas: `Projek_Program`; jadual bawah: `MyProjek`. Klik lajur kunci **`kod_projek`** pada kedua-dua (mesti jenis & format sama).
+3. **Join Kind: *Left Outer*** (kekalkan **semua** projek JPD/BELB, walau tiada padanan MyProjek).
+4. Klik ikon kembang **⇔** pada lajur `MyProjek` → pilih `peratus_jadual_projek`, `peratus_sebenar_projek`, `kos_keseluruhan`, `baki_kos_de` → **OK** (buang *"Use original column name as prefix"*).
+
+✅ **Semak:** projek tanpa padanan MyProjek papar *null* pada lajur kewangan (dijangka) — bukan ralat.
+
+### 4C (Lanjutan) — Unpivot: kewangan ikut tahun
+
+Medan kewangan MyProjek dipecah *wide* (`..._tahun_1` … `..._tahun_5`). Untuk analisis trend tahunan (satu baris = projek × tahun):
+
+1. Pilih lajur `peruntukan_disemak_janm_tahun_1` … `_tahun_5` (tahan **Ctrl**).
+2. **Transform → Unpivot Columns**.
+3. Hasil: lajur **Attribute** (nama tahun) + **Value** (RM). Guna **Transform → Extract → Last Characters** pada *Attribute* untuk dapatkan nombor tahun.
+
+> **Enable load:** query perantara (mis. senarai negeri mentah) boleh dimatikan — klik kanan query → nyahtanda **Enable load** — supaya ia bukan jadual berasingan dalam model.
 
 ---
 
@@ -263,12 +297,18 @@ flowchart TB
      ```
      Tambah `Tahun = YEAR ( Dim_Tarikh[Date] )` → **Mark as Date Table**.
    - **`Dim_Agensi`** — senarai agensi unik dari `agensi_pemilik` / `agensi_pelaksana_utama` (MyProjek). 15 agensi.
-2. **Relationships** (View → **Model**), semua *many-to-one*, penapis *single*:
-   - `Projek_Program[kod_negeri]` → `Dim_Negeri[kod_negeri]`
-   - `MyProjek[negeri]` → `Dim_Negeri[kod_negeri]`
-   - `MyProjek[agensi_pemilik]` → `Dim_Agensi[agensi]`
-   - `Projek_Program[tarikh_tahun]` → `Dim_Tarikh[Date]`
-3. **Kemas paparan:** sembunyikan lajur teknikal (`id`, kunci) — klik kanan → *Hide*.
+2. **Relationships** (View → **Model**) — **seret** lajur dari jadual **fakta** dan lepas di atas lajur padanan dalam jadual **dimensi**. Power BI kesan *cardinality* automatik; sahkan dalam dialog:
+
+   | Seret (fakta) | Lepas di (dimensi) | Cardinality | Arah penapis |
+   |---|---|---|---|
+   | `Projek_Program[kod_negeri]` | `Dim_Negeri[kod_negeri]` | **Many-to-one (∗:1)** | **Single** |
+   | `MyProjek[negeri]` | `Dim_Negeri[kod_negeri]` | **Many-to-one (∗:1)** | **Single** |
+   | `MyProjek[agensi_pemilik]` | `Dim_Agensi[agensi]` | **Many-to-one (∗:1)** | **Single** |
+   | `Projek_Program[tarikh_tahun]` | `Dim_Tarikh[Date]` | **Many-to-one (∗:1)** | **Single** |
+
+   > **Konsep — cardinality & arah:** banyak baris fakta menunjuk **satu** baris dimensi → **∗:1**. Arah **Single** bermaksud penapis mengalir **dimensi → fakta** (pilih *SELANGOR* dalam slicer negeri → hanya projek Selangor tinggal). Elak *Both* melainkan perlu — ia boleh cipta laluan penapis samar-samar.
+
+3. **Kemas paparan:** sembunyikan lajur teknikal (`id`, lajur kunci) — klik kanan → *Hide in report view*.
 
 ✅ **Semak & simpan:**
 - [ ] `Dim_Tarikh` ditanda sebagai Date Table
