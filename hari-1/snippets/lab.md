@@ -159,6 +159,10 @@ flowchart TD
 
 ✅ **Semak:** tiga query kelihatan di panel *Queries*.
 
+**Tangkapan skrin — Get Data → Excel (muat naik / sambung):** pilih **Excel workbook** → **Link to file / Upload file** → **Browse OneDrive**. (Auth *Anonymous*, gateway *none* untuk fail OneLake.)
+
+![Get data: Connect to data source — Excel workbook, Browse OneDrive](../img/step-0-getdata-excel.jpg)
+
 ---
 
 ## Latihan 3 — Bersihkan Data JPD & BELB (Power Query)
