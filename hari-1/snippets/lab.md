@@ -142,12 +142,12 @@ flowchart TD
     class I pick
 ```
 
-### Laluan A — Fabric (pelayar) · *ikut tangkapan skrin 01–09*
+### Laluan A — Fabric (pelayar)
 
 **Cipta workspace dahulu** (Lakehouse mesti duduk dalam workspace jenis Fabric):
 
 1. Buka **Fabric** ([app.fabric.microsoft.com](https://app.fabric.microsoft.com)) → panel kiri **Workspaces → + New workspace**.
-2. **Name:** `KKDW Copilot` → buka **Advanced** → **License mode: Fabric capacity** → pilih kapasiti **F2+** (mis. Malaysia West) → **Apply** *(skrin 01)*.
+2. **Name:** `KKDW Copilot` → buka **Advanced** → **License mode: Fabric capacity** → pilih kapasiti **F2+** (mis. Malaysia West) → **Apply** *(lihat 3 tangkapan skrin di bawah)*.
    > Perlu peranan **Admin / Member** pada kapasiti. Jika pilihan *Fabric capacity* tiada, minta pentadbir tenant tetapkan (rujuk Latihan 0). Jika workspace sudah wujud, cuma **buka** ia dan teruskan ke langkah 3.
 
 **Tangkapan skrin — cipta workspace:**
@@ -163,10 +163,10 @@ flowchart TD
 
 **Kemudian cipta Lakehouse & muat data:**
 
-3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse` *(skrin 02–03)*.
-4. **Get data / Upload** 3 fail Excel (`data_jpd.xlsx`, `data_belb.xlsx`, `data_myprojek.xlsx`) ke **Files** *(skrin 04)*.
-5. **New Dataflow Gen2** (`KKDW_Ingest`) → **Get data → Excel** → **Browse OneDrive/OneLake** → pilih setiap fail *(skrin 05–07)*.
-6. Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(skrin 08–09)*.
+3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse`.
+4. **Get data / Upload** 3 fail Excel (`data_jpd.xlsx`, `data_belb.xlsx`, `data_myprojek.xlsx`) ke **Files** *(lihat tangkapan **Get Data → Excel** di bawah)*.
+5. **New Dataflow Gen2** (`KKDW_Ingest`) → **Get data → Excel** → **Browse OneDrive/OneLake** → pilih setiap fail.
+6. Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)*.
 
 ### Laluan B — Power BI Desktop
 
