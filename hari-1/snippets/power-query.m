@@ -4,9 +4,25 @@
 // ATAU lakukan setiap langkah melalui antara muka (GUI) seperti dalam README/lab.
 //
 // Ganti laluan fail dengan lokasi sebenar data/*.xlsx di komputer anda.
+//
+// SUMBER (pilih satu):
+//  A) Fail tempatan (Power BI Desktop):    Excel.Workbook(File.Contents("C:\...\data_jpd.xlsx"), null, true)
+//  B) OneLake / Lakehouse Files (Fabric):  guna ADLS Gen2 — bukan "Browse SharePoint/OneDrive"
+//     (sambungan Excel SharePoint selalu gagal; ADLS Gen2 baca terus fail dalam Lakehouse Files).
+//
+//     let
+//         Source = AzureStorage.DataLake(
+//             "https://onelake.dfs.fabric.microsoft.com/KKDW Copilot/KKDW_Lakehouse.Lakehouse/Files"
+//         ),
+//         Fail  = Table.SelectRows(Source, each [Name] = "data_jpd.xlsx"){0}[Content],
+//         Sheet = Excel.Workbook(Fail, true){[Item="Sheet1", Kind="Sheet"]}[Data],
+//         NaikTajuk = Table.PromoteHeaders(Sheet, [PromoteAllScalars = true])
+//     in NaikTajuk
+//     // Auth: Organizational account. Boleh guna nama atau GUID workspace/lakehouse dalam URL.
 
 // ============================================================
 // 1) JPD — bersihkan jadual fakta Jalan Perhubungan Desa
+//    (Sumber A ditunjukkan; tukar ke Sumber B untuk OneLake.)
 // ============================================================
 let
     Source = Excel.Workbook(
