@@ -258,3 +258,18 @@ flowchart TB
 ## Cabaran (jika ada masa)
 
 Bina **Conditional Column** kedua dalam MyProjek: `bendera_ketidakpadanan` = `"Semak"` jika `belanja` tinggi tetapi `peratus_sebenar_projek` rendah (ingat: skala **0–100**) — kita akan guna idea ini pada Hari 3 (Risk Score & Early Warning).
+
+---
+
+## 📘 Rujukan Buku
+
+*Architecting Power BI Solutions in Microsoft Fabric* (Packt) — bacaan lanjut bagi topik Hari 1:
+
+| Latihan / topik | Bab & muka surat |
+|---|---|
+| SESI 2 · Fabric, OneLake, **Lakehouse** | Bab 7 *Understanding Microsoft Fabric* (ms 125–153) — Lakehouse **ms 136**, Warehouse ms 141 |
+| SESI 2 · **Import vs DirectQuery vs Direct Lake** | Bab 5 *Deciding on the Storage Mode* (ms 75–106); Direct Lake **ms 146–148** |
+| SESI 3 · Power Query (transform, query folding) | Bab 9 *Performing Optimizations in Power BI* — query folding **ms 206** |
+| SESI 5 · Pemodelan (calc column vs measure) | Bab 9 — calculated column vs measure **ms 210** |
+
+> Nota konsep berkaitan: [`../../nota/02-fabric-onelake.md`](../../nota/02-fabric-onelake.md) · [`../../nota/04-pemodelan-star-schema.md`](../../nota/04-pemodelan-star-schema.md).
