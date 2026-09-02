@@ -172,7 +172,7 @@ flowchart TD
    > **Lakehouse/OneLake TIDAK perlu lesen OneDrive** — jadi ikut laluan CSV → Lakehouse.
 
    **Laluan disyorkan (tiada lesen OneDrive perlu) — CSV → Lakehouse → Load to Tables:**
-   1. Simpan setiap fail sebagai **CSV** (atau guna CSV yang disediakan pengajar).
+   1. Guna 3 CSV **sedia** — `data_jpd.csv`, `data_belb.csv`, `data_myprojek.csv` *(disediakan pengajar: UTF-8, comma, header, `kod_*` sebagai teks — leading zero kekal)*. *(Atau simpan sendiri `xlsx → CSV UTF-8`.)*
    2. Buka **`KKDW_Lakehouse`** → **Files** → **Upload → Upload files** → pilih 3 CSV. *(Tulis ke OneLake, bukan OneDrive — tiada lesen perlu.)*
    3. Klik kanan setiap CSV → **Load to Tables → New table**. *(CSV→Delta native; Excel **tidak** boleh Load to Tables.)*
    4. Jadual muncul di `KKDW_Lakehouse/Tables` → terus guna via **Direct Lake** (langkau Dataflow, teruskan ke Latihan 5 pemodelan).
