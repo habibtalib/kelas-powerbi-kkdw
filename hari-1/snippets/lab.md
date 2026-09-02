@@ -38,6 +38,18 @@ flowchart LR
 
 **Tujuan:** pastikan alat sedia sebelum mula. Pilih laluan ikut komputer anda.
 
+### Pautan penting — daftar / log masuk
+
+| Perkhidmatan | Pautan | Untuk |
+|---|---|---|
+| **Power BI** | [app.powerbi.com](https://app.powerbi.com) | Daftar / log masuk · bina & kongsi laporan (Service) |
+| **Microsoft Fabric** | [app.fabric.microsoft.com](https://app.fabric.microsoft.com) | Workspace, Lakehouse, Dataflow, Copilot (Laluan A) |
+| **Power BI Desktop** | [powerbi.microsoft.com/desktop](https://powerbi.microsoft.com/desktop/) | Muat turun (Windows, Laluan B) |
+| **Azure Portal** | [portal.azure.com](https://portal.azure.com) | *(pentadbir)* sahkan kapasiti Fabric |
+| **Microsoft Entra** | [entra.microsoft.com](https://entra.microsoft.com) | *(pentadbir)* identiti, pengguna, lesen |
+
+> **Log masuk dengan akaun organisasi KKDW** yang diberi (dalam **tenant KKDW**). Jika belum ada akaun, minta **pentadbir IT** daftarkan anda — **bukan** akaun peribadi/guest (akan gagal akses kapasiti/Copilot).
+
 ### Laluan A — Fabric (pelayar) · mana-mana OS (termasuk macOS)
 
 1. Buka pelayar → **`app.fabric.microsoft.com`** → **Sign in** dengan akaun organisasi KKDW.
