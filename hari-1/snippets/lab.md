@@ -165,18 +165,25 @@ flowchart TD
 
 3. Dalam workspace → **New item → Lakehouse** → nama `KKDW_Lakehouse` *(lihat tangkapan di bawah)*.
 4. **Get data / Upload** 3 fail Excel (`data_jpd.xlsx`, `data_belb.xlsx`, `data_myprojek.xlsx`) ke **Files** *(lihat tangkapan **Get Data → Excel** di bawah)*.
-5. **New Dataflow Gen2** (`KKDW_Ingest`) → **Get data → Excel workbook → Upload file** *(lihat tangkapan **Dataflow Gen2** di bawah)* — **cara paling stabil**:
-   - Dalam *Connect to data source*, pilih **Upload file** *(bukan "Link to file" / "Browse OneDrive/SharePoint")* → seret `data_jpd.xlsx`. Fail dibenam terus dalam dataflow — **tiada laluan, OneLake, atau gateway**.
-   - **Next → Navigator →** tanda **Sheet1 → Create / Transform data**.
-   - Ulang untuk `data_belb.xlsx` & `data_myprojek.xlsx`.
+5. **Muat data ke Lakehouse.**
 
-   > **Kenapa bukan sambungan lain:** *Browse SharePoint/OneDrive* perlu fail di SharePoint + auth organisasi (selalu gagal); *Azure Data Lake Storage Gen2* pula kerap **"can't find file path"** (format URL OneLake / nama ada ruang / keizinan). **Upload file** mengelak kedua-duanya.
-6. Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)*.
+   > ⚠️ **Amaran lesen (PENTING untuk akaun gov/KKDW):** sambungan **Excel** dalam Dataflow Gen2 — **Upload file** *dan* **Link to file / Browse OneDrive/SharePoint** — semuanya melalui **OneDrive for Business**, jadi perlu **lesen OneDrive/SharePoint**. Akaun tanpa lesen dapat ralat:
+   > *"Your account does not have a license for SharePoint Online or OneDrive for Business is not initialized."*
+   > **Lakehouse/OneLake TIDAK perlu lesen OneDrive** — jadi ikut laluan CSV → Lakehouse.
 
-> **Alternatif lain (ikut keutamaan):**
-> 1. **Paling kukuh, tanpa Dataflow:** simpan fail sebagai **CSV** → muat naik ke Lakehouse **Files** → klik kanan CSV → **Load to Tables** (CSV→Delta native; Excel **tidak** boleh) → guna terus via **Direct Lake**.
-> 2. **Power BI Desktop:** **Get Data → Excel workbook** dari fail tempatan — paling mudah untuk latihan luar talian.
-> 3. **Lanjutan — OneLake ADLS Gen2** (jika "can't find file path"): dalam **Azure Data Lake Storage Gen2**, letak URL **setakat workspace sahaja** lalu **navigate** ke `KKDW_Lakehouse.Lakehouse/Files` (jangan masukkan nama fail dalam URL); guna **GUID** workspace/lakehouse jika nama ada ruang; Auth **Organizational account**; kemudian `Excel.Workbook([Content], true)` — lihat [`power-query.m`](./power-query.m).
+   **Laluan disyorkan (tiada lesen OneDrive perlu) — CSV → Lakehouse → Load to Tables:**
+   1. Simpan setiap fail sebagai **CSV** (atau guna CSV yang disediakan pengajar).
+   2. Buka **`KKDW_Lakehouse`** → **Files** → **Upload → Upload files** → pilih 3 CSV. *(Tulis ke OneLake, bukan OneDrive — tiada lesen perlu.)*
+   3. Klik kanan setiap CSV → **Load to Tables → New table**. *(CSV→Delta native; Excel **tidak** boleh Load to Tables.)*
+   4. Jadual muncul di `KKDW_Lakehouse/Tables` → terus guna via **Direct Lake** (langkau Dataflow, teruskan ke Latihan 5 pemodelan).
+
+   **Jika akaun ADA lesen OneDrive** — boleh guna Dataflow Gen2: **Get data → Excel workbook → Upload file** *(lihat tangkapan **Dataflow Gen2** di bawah)* → **Next → Navigator → Sheet1 → Transform data**; ulang untuk 3 fail.
+6. *(Laluan Dataflow sahaja)* Dalam Power Query Online, **rename** setiap query: `JPD`, `BELB`, `MyProjek` *(lihat tangkapan **Power Query**, Latihan 3)*.
+
+> **Alternatif tambahan:**
+> - **Kelas besar / ramai akaun tanpa lesen:** cara paling licin — **pengajar** muat data **sekali** ke satu **Lakehouse / semantic model dikongsi**; pelajar diberi akses (Viewer/Member) dan guna model itu. Tiada muat naik oleh pelajar ⇒ tiada isu lesen.
+> - **Power BI Desktop:** **Get Data → Excel workbook** dari fail tempatan — tiada lesen OneDrive perlu (perlu Windows).
+> - **Lanjutan — OneLake ADLS Gen2** (jika "can't find file path"): letak URL **setakat workspace** lalu **navigate** ke `KKDW_Lakehouse.Lakehouse/Files` (jangan letak nama fail dalam URL); guna **GUID** jika nama ada ruang; Auth **Organizational account**; kemudian `Excel.Workbook([Content], true)` — lihat [`power-query.m`](./power-query.m).
 
 **Tangkapan skrin — Lakehouse & Dataflow:**
 
