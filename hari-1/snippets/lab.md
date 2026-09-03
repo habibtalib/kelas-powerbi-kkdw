@@ -327,7 +327,29 @@ Untuk laporan Kewangan (Hari 2), cantum medan kewangan MyProjek ke `Projek_Progr
 
 ✅ **Semak:** setiap projek kini ada **5 baris** (Tahun 1–5); senang `SUM(Peruntukan)` ikut Tahun.
 
-> **Belanja serupa:** ulang untuk `belanja_janm_tahun_1..5` (query berasingan) jika mahu banding **peruntukan vs belanja** ikut tahun.
+#### 4C(b) — Unpivot **banyak kumpulan** sekali (peruntukan + belanja + …)
+
+MyProjek ada **beberapa** kumpulan `_tahun_1..5` (mis. `peruntukan_disemak_janm_*`, `belanja_janm_*`). **Jangan** unpivot semua terus — `Value` akan campurkan peruntukan & belanja jadi satu lajur (salah). Guna corak **Unpivot → Split → Pivot**:
+
+*Selepas Unpivot+Split+Pivot — satu baris = projek × tahun, tiap metrik lajur sendiri:*
+
+| kod_projek | Tahun | Peruntukan | Belanja |
+|---|---|---|---|
+| P001 | 1 | 10,000 | 8,000 |
+| P001 | 2 | 12,000 | 11,500 |
+
+**Langkah:**
+1. Pilih **semua** lajur `_tahun_N` (peruntukan **dan** belanja) → klik kanan → **Unpivot Columns**. *(Attribute contoh: `belanja_janm_tahun_3`.)*
+2. Pilih lajur `Attribute` → **Transform → Split Column → By Delimiter** → **Custom** `_tahun_` → **Right-most delimiter**. Hasil:
+   - `Attribute.1` = **nama metrik** (`peruntukan_disemak_janm`, `belanja_janm`)
+   - `Attribute.2` = **nombor tahun** (`1`…`5`)
+3. **Rename** `Attribute.2` → **`Tahun`** (jenis **Whole Number**).
+4. Pilih lajur `Attribute.1` → **Transform → Pivot Column** → **Values Column = `Value`** → **Advanced options → Don't aggregate**. → setiap metrik jadi **lajur berasingan**.
+5. **Rename** lajur metrik (mis. → `Peruntukan`, `Belanja`) → set **Currency**.
+
+✅ **Semak:** `kod_projek | Tahun | Peruntukan | Belanja | …` — setiap projek 5 baris (Tahun 1–5), semua metrik dalam lajur berasingan.
+
+> **Kunci:** corak ini berkesan bila semua lajur ikut pola `<metrik>_tahun_<n>`. Delimiter mesti `_tahun_` (right-most) supaya **nama metrik** & **nombor tahun** terpisah betul. Ini elak buat query berasingan + Merge.
 
 > **Enable load:** query perantara (mis. senarai negeri mentah) boleh dimatikan — klik kanan query → nyahtanda **Enable load** — supaya ia bukan jadual berasingan dalam model.
 
