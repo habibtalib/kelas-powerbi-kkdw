@@ -25,6 +25,14 @@ Jumlah Peruntukan = SUM ( MyProjek[peruntukan_disemak_janm_tahun_1] )
 ```dax
 Jumlah Belanja = SUM ( MyProjek[belanja_janm_tahun_1] )
 ```
+
+> ⚠️ **Jika anda buat Unpivot (Latihan 4C):** lajur `..._tahun_1` **sudah tiada** → dua measure di atas jadi **tak sah**. Gantikan dengan lajur *long*:
+> ```dax
+> Jumlah Peruntukan = SUM ( MyProjek[Peruntukan] )
+> Jumlah Belanja    = SUM ( MyProjek[Belanja] )
+> ```
+> Versi long ini **jumlah semua tahun** (bukan Tahun 1 sahaja) & boleh ditapis ikut `Tahun`. **Tip:** buat Unpivot pada **Reference** (`MyProjek_Tahunan`) supaya `MyProjek` asal (wide) kekal untuk measure lain.
+
 ```dax
 Baki = [Jumlah Peruntukan] - [Jumlah Belanja]
 ```
