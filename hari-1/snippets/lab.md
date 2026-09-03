@@ -377,15 +377,16 @@ flowchart TB
 
 ![Model view KKDW_Model: 7 jadual + relationships star schema](../img/step-2-model-view.jpg)
 
-1. **Jadual dimensi:**
+**Langkah 0 — Cipta & buka model (Fabric, pelayar) — *ini yang selalu tertinggal*:**
+- **a)** Dalam **`KKDW_Lakehouse`** (selepas jadual siap dari Latihan 2–4), klik **New semantic model** *(butang di bar atas Lakehouse)* → nama **`KKDW_Model`** → **tanda jadual**: `Projek_Program`, `MyProjek`, `Dim_Negeri`, `Dim_Tarikh`, `Dim_Agensi` → **Confirm**.
+- **b)** Buka **`KKDW_Model`** → klik **Open data model** — inilah **Model view** dalam pelayar (kanvas jadual + garisan relationships + panel measures).
+- **c)** *Semua langkah di bawah dibuat di sini (Power BI Service / Fabric) — bukan Power BI Desktop.*
+
+1. **Jadual dimensi** — dalam Fabric ini ialah **jadual Lakehouse** (bukan DAX *calculated table*, kerana model **DirectLake**). Sediakan semasa integrasi:
    - **`Dim_Negeri`** — senarai negeri unik (gabungan `kod_negeri` JPD/BELB + `negeri` MyProjek, dinormalkan; mis. `N.SEMBILAN` → `NEGERI SEMBILAN`). 16 negeri.
-   - **`Dim_Tarikh`** — Date table 2017–2028. Dalam Desktop: **Modeling → New Table** →
-     ```dax
-     Dim_Tarikh = CALENDAR ( DATE ( 2017, 1, 1 ), DATE ( 2028, 12, 31 ) )
-     ```
-     Tambah `Tahun = YEAR ( Dim_Tarikh[Date] )` → **Mark as Date Table**.
+   - **`Dim_Tarikh`** — Date table 2017–2028 sebagai **jadual Lakehouse** *(DirectLake tak sokong `CALENDAR()`)*. Jana ringkas via **Dataflow Gen2**: `Source = List.Dates(#date(2017,1,1), 4383, #duration(1,0,0,0))` → **To Table** → tambah `Tahun = Date.Year([Date])` → tulis ke Lakehouse. Kemudian dalam Model view → **Mark as date table**.
    - **`Dim_Agensi`** — senarai agensi unik dari `agensi_pemilik` / `agensi_pelaksana_utama` (MyProjek). 15 agensi.
-2. **Relationships** (View → **Model**) — **seret** lajur dari jadual **fakta** dan lepas di atas lajur padanan dalam jadual **dimensi**. Power BI kesan *cardinality* automatik; sahkan dalam dialog:
+2. **Relationships** (dalam **Model view** yang dibuka di Langkah 0) — **seret** lajur dari jadual **fakta** dan lepas di atas lajur padanan dalam jadual **dimensi**. Fabric kesan *cardinality* automatik; sahkan dalam dialog:
 
    | Seret (fakta) | Lepas di (dimensi) | Cardinality | Arah penapis |
    |---|---|---|---|
@@ -401,7 +402,7 @@ flowchart TB
 ✅ **Semak & simpan:**
 - [ ] `Dim_Tarikh` ditanda sebagai Date Table
 - [ ] 4 relationships kelihatan sebagai garisan dalam Model view
-- [ ] **Laluan A:** semantic model `KKDW_Model` wujud dalam workspace · **Laluan B:** **File → Save As → `hari-1.pbix`**
+- [ ] Semantic model **`KKDW_Model`** wujud dalam workspace Fabric dengan 4 relationships *(perubahan auto-simpan — tiada fail `.pbix`)*
 
 > **Hasil sebenar kelas:** model DirectLake **`KKDW_Model`** (7 jadual, 4 relationships, 23 measures) telah dibina & diuji — mis. `Jumlah Projek` = 1,399, `% Utilisasi` ≈ 80.5%. Measures dibina Hari 2 (diteruskan semasa kelas).
 
