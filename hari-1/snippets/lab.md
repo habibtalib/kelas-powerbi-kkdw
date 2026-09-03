@@ -402,12 +402,9 @@ flowchart TB
 
 ![Model view KKDW_Model: 7 jadual + relationships star schema](../img/step-2-model-view.jpg)
 
-**Langkah 0 — Cipta & buka model (Fabric, pelayar) — *ini yang selalu tertinggal*:**
-- **a)** Dalam **`KKDW_Lakehouse`** (selepas jadual siap dari Latihan 2–4), klik **New semantic model** *(butang di bar atas Lakehouse)* → nama **`KKDW_Model`** → **tanda jadual**: `Projek_Program`, `MyProjek`, `Dim_Negeri`, `Dim_Tarikh`, `Dim_Agensi` → **Confirm**.
-- **b)** Buka **`KKDW_Model`** → klik **Open data model** — inilah **Model view** dalam pelayar (kanvas jadual + garisan relationships + panel measures).
-- **c)** *Semua langkah di bawah dibuat di sini (Power BI Service / Fabric) — bukan Power BI Desktop.*
+> ⚠️ **Urutan penting:** bina **jadual dimensi DAHULU** (Langkah 1) → **baru** cipta semantic model (Langkah 2). Jika model dicipta dulu, **Dim tak muncul** dalam senarai jadual kerana ia belum wujud dalam Lakehouse.
 
-1. **Sediakan 3 jadual dimensi** — dalam Fabric ia ialah **jadual Lakehouse** (bukan DAX *calculated table* — model **DirectLake**). Bina dalam **Dataflow Gen2 (Power Query Online)**; setiap query set **Data destination → `KKDW_Lakehouse`** kemudian **Publish**.
+**Langkah 1 — Sediakan 3 jadual dimensi** — dalam Fabric ia ialah **jadual Lakehouse** (bukan DAX *calculated table* — model **DirectLake**). Bina dalam **Dataflow Gen2 (Power Query Online)**; setiap query set **Data destination → `KKDW_Lakehouse`** kemudian **Publish**.
 
 **Mula — get data source:** buka **Dataflow Gen2 `KKDW_Ingest`** yang sudah ada query `JPD` / `BELB` / `MyProjek` / `Projek_Program` (dari Latihan 2–4) — di sinilah kita **Reference** query itu untuk bina Dim. *(Jika mula dari kosong: **New Dataflow Gen2 → Get data → OneLake data hub** (atau connector **Lakehouse**) → pilih jadual `Projek_Program` & `MyProjek` dahulu, kemudian Reference.)*
 
@@ -439,9 +436,14 @@ in
 
 Namakan **`Dim_Tarikh`**; selepas Publish → dalam **Model view → klik jadual → Mark as date table** (lajur `Date`).
 
-> **Semua 3 query:** pastikan **Data destination = `KKDW_Lakehouse`** sebelum **Publish**. Selepas refresh, jadual muncul di **Lakehouse → Tables**, dan tarik masuk ke `KKDW_Model` (Langkah 0) jika belum ada.
+> **Semua 3 query:** pastikan **Data destination = `KKDW_Lakehouse`** sebelum **Publish**. Selepas refresh, ketiga-tiga Dim muncul di **Lakehouse → Tables** (bersama `Projek_Program` & `MyProjek`).
 
-2. **Relationships** (dalam **Model view** yang dibuka di Langkah 0) — **seret** lajur dari jadual **fakta** dan lepas di atas lajur padanan dalam jadual **dimensi**. Fabric kesan *cardinality* automatik; sahkan dalam dialog:
+**Langkah 2 — Cipta & buka semantic model** *(buat SELEPAS semua jadual — fakta + dim — ada dalam Lakehouse):*
+- **a)** Dalam **`KKDW_Lakehouse`** → klik **New semantic model** *(butang di bar atas Lakehouse)* → nama **`KKDW_Model`** → **tanda jadual**: `Projek_Program`, `MyProjek`, `Dim_Negeri`, `Dim_Tarikh`, `Dim_Agensi` → **Confirm**. *(Kelima-lima kini ada dalam senarai kerana Dim sudah dibina di Langkah 1.)*
+- **b)** Buka **`KKDW_Model`** → klik **Open data model** — inilah **Model view** dalam pelayar (kanvas jadual + garisan relationships + panel measures).
+- **c)** *Semua langkah di bawah dibuat di sini (Power BI Service / Fabric) — bukan Power BI Desktop.*
+
+**Langkah 3 — Relationships** (dalam **Model view**) — **seret** lajur dari jadual **fakta** dan lepas di atas lajur padanan dalam jadual **dimensi**. Fabric kesan *cardinality* automatik; sahkan dalam dialog:
 
    | Seret (fakta) | Lepas di (dimensi) | Cardinality | Arah penapis |
    |---|---|---|---|
@@ -452,7 +454,7 @@ Namakan **`Dim_Tarikh`**; selepas Publish → dalam **Model view → klik jadual
 
    > **Konsep — cardinality & arah:** banyak baris fakta menunjuk **satu** baris dimensi → **∗:1**. Arah **Single** bermaksud penapis mengalir **dimensi → fakta** (pilih *SELANGOR* dalam slicer negeri → hanya projek Selangor tinggal). Elak *Both* melainkan perlu — ia boleh cipta laluan penapis samar-samar.
 
-3. **Kemas paparan:** sembunyikan lajur teknikal (`id`, lajur kunci) — klik kanan → *Hide in report view*.
+**Langkah 4 — Kemas paparan:** sembunyikan lajur teknikal (`id`, lajur kunci) — klik kanan → *Hide in report view*.
 
 ✅ **Semak & simpan:**
 - [ ] `Dim_Tarikh` ditanda sebagai Date Table
