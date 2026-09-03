@@ -436,7 +436,15 @@ in
 
 Namakan **`Dim_Tarikh`**; selepas Publish → dalam **Model view → klik jadual → Mark as date table** (lajur `Date`).
 
-> **Semua 3 query:** pastikan **Data destination = `KKDW_Lakehouse`** sebelum **Publish**. Selepas refresh, ketiga-tiga Dim muncul di **Lakehouse → Tables** (bersama `Projek_Program` & `MyProjek`).
+**Set Data destination (WAJIB untuk setiap query Dim) & Publish** — inilah yang menulis Dim ke Lakehouse:
+1. Klik query (mis. **`Dim_Negeri`**) → di penjuru **bawah kanan** editor, cari **Data destination** → klik **+ (Add data destination) → Lakehouse**.
+2. *(Kali pertama)* sahkan **Connection** (Organizational account) → **Next**.
+3. Pilih workspace **KKDW Copilot** → **`KKDW_Lakehouse`** → pilih **New table** → nama jadual = `Dim_Negeri` → **Next**.
+4. **Update method: Replace** *(refresh penuh setiap kali)* → **Save settings**. *(Ikon destinasi kini muncul pada query.)*
+5. **Ulang langkah 1–4** untuk **`Dim_Agensi`** dan **`Dim_Tarikh`** (nama jadual masing-masing).
+6. Klik **Publish** *(butang bawah kanan editor Dataflow)* → tunggu **refresh "succeeded"** (~10–60s).
+
+✅ **Semak Langkah 1:** buka **`KKDW_Lakehouse` → Tables** — `Dim_Negeri`, `Dim_Agensi`, `Dim_Tarikh` sudah ada (bersama `Projek_Program` & `MyProjek`). **Barulah** teruskan ke Langkah 2.
 
 **Langkah 2 — Cipta & buka semantic model** *(buat SELEPAS semua jadual — fakta + dim — ada dalam Lakehouse):*
 - **a)** Dalam **`KKDW_Lakehouse`** → klik **New semantic model** *(butang di bar atas Lakehouse)* → nama **`KKDW_Model`** → **tanda jadual**: `Projek_Program`, `MyProjek`, `Dim_Negeri`, `Dim_Tarikh`, `Dim_Agensi` → **Confirm**. *(Kelima-lima kini ada dalam senarai kerana Dim sudah dibina di Langkah 1.)*
