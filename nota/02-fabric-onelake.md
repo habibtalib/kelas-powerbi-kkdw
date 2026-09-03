@@ -54,7 +54,7 @@ Kenapa ini penting untuk KKDW:
 
 Secara tradisi ada dua pilihan: **data lake** (simpan apa sahaja fail mentah, murah, tetapi kurang struktur) atau **data warehouse** (jadual berstruktur untuk analisis, tetapi ketat). **Lakehouse** menggabungkan kedua-duanya — simpan fail mentah **dan** jadual berstruktur di tempat yang sama.
 
-Untuk KKDW: fail `data_myprojek.xlsx` mentah boleh dimuat naik ke Lakehouse, kemudian ditransform menjadi jadual bersih `Fakta_Projek` — semuanya dalam satu Lakehouse.
+Untuk KKDW: fail `data_myprojek.xlsx` mentah boleh dimuat naik ke Lakehouse, kemudian ditransform menjadi jadual bersih `MyProjek` — semuanya dalam satu Lakehouse.
 
 ### Lakehouse vs Warehouse — bila guna yang mana
 
@@ -101,11 +101,11 @@ Ciri penuh Fabric memerlukan **Fabric capacity**, dijual mengikut saiz (F2, F4, 
 
 ---
 
-## Bila guna Fabric penuh vs Power BI Desktop sahaja
+## Bila guna apa (kursus ini = **Fabric pelayar**)
 
 | Situasi | Guna |
 |---------|------|
-| Belajar, prototaip, data kecil (kursus ini) | **Power BI Desktop sahaja** (percuma) |
+| Belajar, prototaip, data kecil (**kursus ini**) | **Fabric / Power BI Service (pelayar)** |
 | Data besar, banyak sumber, pasukan berkongsi | **Fabric** (OneLake + Lakehouse + Dataflows) |
 | Perlu Copilot / NL Q&A penuh | **Fabric F64+** atau tenant Copilot |
 | Transformasi berjadual & boleh guna semula | **Dataflows Gen2** dalam Fabric |

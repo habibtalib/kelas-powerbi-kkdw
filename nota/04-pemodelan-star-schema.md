@@ -25,10 +25,10 @@ Penyelesaian standard industri: **Star Schema**.
                  │  Dim_Negeri │
                  └──────┬──────┘
    ┌─────────────┐      │      ┌─────────────┐
-   │  Dim_Status │──┐   │   ┌──│  Dim_Tarikh │
+   │  Dim_Agensi │──┐   │   ┌──│  Dim_Tarikh │
    └─────────────┘  ▼   ▼   ▼  └─────────────┘
                  ┌───────────────┐
-                 │  Fakta_Projek │  ← kos, peruntukan, belanja, baki, % kemajuan
+                 │Projek_Program │  ← kos · peruntukan · belanja · % kemajuan
                  └───────────────┘
 ```
 
@@ -39,11 +39,11 @@ Bentuknya seperti **bintang** — jadual Fakta di tengah, jadual Dimensi memanca
 | | **Jadual Fakta** | **Jadual Dimensi** |
 |---|------------------|--------------------|
 | Isi | Nombor yang **diukur** | Konteks untuk **menapis / mengumpul** |
-| Contoh medan KKDW | `kos_projek`, `kos_keseluruhan`, `belanja_janm`, `baki_kos_de`, `peratus_sebenar_projek` | `Dim_Negeri`, `Dim_Status`, `Dim_Daerah`, `Dim_Tarikh` |
+| Contoh medan KKDW | `kos_projek`, `kos_keseluruhan`, `belanja_janm_tahun_1`, `baki_kos_de`, `peratus_sebenar_projek` | `Dim_Negeri`, `Dim_Tarikh`, `Dim_Agensi` |
 | Satu baris = | Satu projek | Satu negeri / satu status / satu tarikh |
 | Saiz | Panjang (banyak baris) | Pendek (nilai unik sahaja) |
 
-Fakta menjawab *"berapa?"*; Dimensi menjawab *"mengikut apa?"* — contoh: *"berapa `belanja_janm` (Fakta) mengikut negeri (Dimensi)?"*
+Fakta menjawab *"berapa?"*; Dimensi menjawab *"mengikut apa?"* — contoh: *"berapa `belanja_janm_tahun_1` (Fakta) mengikut negeri (Dimensi)?"*
 
 ---
 
@@ -62,12 +62,12 @@ Fakta menjawab *"berapa?"*; Dimensi menjawab *"mengikut apa?"* — contoh: *"ber
 Hubungan biasa dalam model KKDW:
 
 ```
-Fakta_Projek[kod_negeri]  →  Dim_Negeri[kod_negeri]    (many-to-one)
-Fakta_Projek[tahun]       →  Dim_Tarikh[Tahun]         (many-to-one)
-Fakta_Projek[status]      →  Dim_Status[status]        (many-to-one)
+Projek_Program[kod_negeri]   →  Dim_Negeri[kod_negeri]  (many-to-one)
+Projek_Program[tarikh_tahun] →  Dim_Tarikh[Date]        (many-to-one)
+MyProjek[agensi_pemilik]     →  Dim_Agensi[agensi]      (many-to-one)
 ```
 
-> **Arah penapisan:** dalam star schema, penapis mengalir dari Dimensi **ke** Fakta (satu arah). Pilih Sabah dalam `Dim_Negeri` → hanya projek Sabah dalam `Fakta_Projek` ditapis. Inilah asas kepada seluruh interaktiviti dashboard Hari 2.
+> **Arah penapisan:** dalam star schema, penapis mengalir dari Dimensi **ke** Fakta (satu arah). Pilih Sabah dalam `Dim_Negeri` → hanya projek Sabah dalam `Projek_Program` ditapis. Inilah asas kepada seluruh interaktiviti dashboard Hari 2.
 
 ---
 
@@ -92,7 +92,7 @@ Akhir sekali, dalam **Model view (Power BI Service)**: **Mark as date table**, d
 
 ## Amalan terbaik pemodelan
 
-- **Nama jelas & konsisten** — `Fakta_Projek`, `Dim_Negeri` (bukan `Query1`, `Sheet3`).
+- **Nama jelas & konsisten** — `Projek_Program`, `Dim_Negeri` (bukan `Query1`, `Sheet3`).
 - **Sembunyikan lajur teknikal** — klik kanan `id`, kunci → **Hide** supaya paparan kemas untuk pembina visual.
 - **Satu Date table aktif** untuk seluruh model.
 - **Elak many-to-many** melainkan benar-benar perlu.
