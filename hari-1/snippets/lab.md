@@ -409,6 +409,8 @@ flowchart TB
 
 1. **Sediakan 3 jadual dimensi** — dalam Fabric ia ialah **jadual Lakehouse** (bukan DAX *calculated table* — model **DirectLake**). Bina dalam **Dataflow Gen2 (Power Query Online)**; setiap query set **Data destination → `KKDW_Lakehouse`** kemudian **Publish**.
 
+**Mula — get data source:** buka **Dataflow Gen2 `KKDW_Ingest`** yang sudah ada query `JPD` / `BELB` / `MyProjek` / `Projek_Program` (dari Latihan 2–4) — di sinilah kita **Reference** query itu untuk bina Dim. *(Jika mula dari kosong: **New Dataflow Gen2 → Get data → OneLake data hub** (atau connector **Lakehouse**) → pilih jadual `Projek_Program` & `MyProjek` dahulu, kemudian Reference.)*
+
 **`Dim_Negeri`** — senarai negeri unik (kunci: `kod_negeri`):
 - Klik kanan query **`Projek_Program` → Reference** → namakan **`Dim_Negeri`**.
 - Pilih lajur `kod_negeri` → **Home → Remove Other Columns** (buang semua lajur lain).
