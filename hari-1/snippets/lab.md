@@ -314,8 +314,10 @@ Medan kewangan MyProjek dipecah *wide* (`..._tahun_1` … `..._tahun_5`). Untuk 
 
 **Senario:** data yang **sama** tetapi dipecah **satu fail Excel per tahun** (mis. `belanja_2021.xlsx`, `belanja_2022.xlsx`, `belanja_2023.xlsx` — skema/lajur sama). Jangan buka satu-satu — guna **Combine files from folder** (append automatik).
 
-1. **Susun** semua fail dalam **satu folder**: Lakehouse **Files** (mis. `Files/akaun/`) atau folder tempatan (mis. `C:\Akaun\`).
-2. **Get data → Folder** (Power BI Desktop) atau sambung folder **OneLake / Lakehouse Files** (Fabric) → pilih folder itu.
+1. **Muat naik** semua fail tahunan ke **satu subfolder Lakehouse Files** (mis. `Files/akaun/`).
+2. **New Dataflow Gen2 → Get data → Azure Data Lake Storage Gen2** — *Fabric (pelayar) **tiada** connector "Folder" tempatan; guna ADLS Gen2 di atas OneLake.* Masukkan URL **setakat folder** (jangan letak nama fail):
+   `https://onelake.dfs.fabric.microsoft.com/<workspace>/<lakehouse>.Lakehouse/Files/akaun/`
+   → **navigate** → ia senaraikan semua fail dalam folder. *(Atau **Get data → SharePoint folder** jika fail asal di SharePoint.)*
 3. Power Query papar senarai fail (lajur `Name`, `Extension`, `Folder Path`, **`Content`**). **Tapis** `Extension` = `.xlsx` dan buang fail sementara (`~$…`).
 4. Klik ikon **Combine files** (dua anak panah ⤓ pada lajur **`Content`**) → **Combine & Transform Data** → pilih **`Sheet1`** → **OK**.
    *Power Query auto-jana:* `Sample File` + fungsi **Transform File** + query gabungan — **semua baris semua tahun ditindan jadi satu jadual**.
