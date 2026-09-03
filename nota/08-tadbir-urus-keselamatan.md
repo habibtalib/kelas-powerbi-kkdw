@@ -20,7 +20,7 @@ Contoh KKDW: pegawai negeri Sabah log masuk → hanya nampak projek Sabah; pegaw
 
 ### Cara ia berfungsi (ringkas)
 
-1. **Modeling → Manage roles** — buat peranan, contoh `Sabah`.
+1. Dalam **Power BI Service** → buka **`KKDW_Model` → Open data model → Manage roles** — buat peranan, contoh `Sabah`.
 2. Tetapkan penapis DAX pada jadual, contoh:
    ```dax
    [kod_negeri] = "12"

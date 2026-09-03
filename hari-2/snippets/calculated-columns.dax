@@ -1,8 +1,12 @@
 // calculated-columns.dax
-// Lajur terkira (calculated columns) dan jadual Kalendar untuk model data KKDW.
-// Cara guna: Modeling > New column (untuk lajur) atau New table (untuk Kalendar).
-// Nota: kategori_status lebih baik dibina dalam Power Query (lihat power-query.m),
-// tetapi versi DAX di bawah disediakan sebagai rujukan.
+// ⚠️ MODEL IMPORT SAHAJA — `KKDW_Model` kursus ini ialah **DirectLake**, yang
+//    TIDAK menyokong calculated columns / calculated tables. Dalam Fabric (pelayar),
+//    bina logik ini dalam **Power Query** / sebagai **jadual Lakehouse**:
+//      • kategori_status, Urutan Status, Varians Projek, Bendera Semak → lajur Power Query.
+//      • Dim_Tarikh → jadual Lakehouse (jana via `List.Dates` M — lihat hari-1 Latihan 5),
+//        BUKAN CALENDAR().
+//    DAX di bawah dikekalkan sebagai RUJUKAN untuk model **Import** sahaja.
+// Cara guna (Import sahaja): Modeling > New column (lajur) / New table (Kalendar).
 
 // ---------- Lajur terkira dalam "Projek_Program" ----------
 
@@ -38,7 +42,7 @@ Bendera Semak =
 VAR Util =
     DIVIDE ( MyProjek[belanja_janm_tahun_1], MyProjek[peruntukan_disemak_janm_tahun_1] )
 RETURN
-    IF ( Util > MyProjek[peratus_sebenar_projek] + 0.2, "Semak", "Normal" )
+    IF ( Util * 100 > MyProjek[peratus_sebenar_projek] + 20, "Semak", "Normal" )
 
 
 // ---------- Jadual Kalendar (Modeling > New table) ----------

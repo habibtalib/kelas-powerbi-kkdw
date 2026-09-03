@@ -26,7 +26,8 @@ Tiga bahagian utama:
 
 | Bahagian | Peranan | Bila digunakan |
 |----------|---------|----------------|
-| **Power BI Desktop** | Bina model, DAX, visual (aplikasi Windows, percuma) | Hari 1–3 |
+| **Power BI Service / Fabric (pelayar)** | Bina model, DAX, visual, dashboard — **laluan utama kursus** | Hari 1–3 |
+| **Power BI Desktop** | Sama, tetapi aplikasi Windows (percuma) | *Pilihan* (luar talian) |
 | **Power BI Service** | Terbit, kongsi & jadualkan refresh (awan) | Hari 2 |
 | **Power BI Mobile** | Lihat dashboard di telefon/tablet | Selepas kursus |
 

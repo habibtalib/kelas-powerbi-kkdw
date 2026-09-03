@@ -85,7 +85,7 @@ Kenapa ia istimewa:
 | **DirectQuery** | Kekal di sumber | Tidak (masa nyata) | Bergantung sumber |
 | **Direct Lake** | Lakehouse/Warehouse (OneLake) | **Tidak** | Hampir Import |
 
-> **Untuk kursus ini kita guna Import** (data KKDW kecil, 100% Power BI Desktop). Direct Lake diterangkan supaya anda faham arah tuju bila KKDW menaik taraf ke Fabric penuh — ketika itu Direct Lake ialah pilihan terbaik untuk data besar yang perlu sentiasa terkini. Nota: setakat kini semantic model Direct Lake dibina dari **Power BI Service**, bukan Desktop.
+> **Untuk kursus ini kita guna Fabric (pelayar)** — muat data ke **Lakehouse**, kemudian model **DirectLake `KKDW_Model`** dibina dalam **Power BI Service** (bukan Desktop). *(Mod Import masih boleh untuk data kecil sebagai pilihan.)* Direct Lake ialah pilihan terbaik bila data besar & perlu sentiasa terkini.
 
 ---
 
@@ -110,7 +110,7 @@ Ciri penuh Fabric memerlukan **Fabric capacity**, dijual mengikut saiz (F2, F4, 
 | Perlu Copilot / NL Q&A penuh | **Fabric F64+** atau tenant Copilot |
 | Transformasi berjadual & boleh guna semula | **Dataflows Gen2** dalam Fabric |
 
-Untuk kursus ini, sebahagian besar latihan berjalan **100% dalam Power BI Desktop**. Konsep Fabric (OneLake, Lakehouse, Semantic Model) diterangkan supaya anda faham gambaran besar bila KKDW menaik taraf ke platform penuh.
+Untuk kursus ini, latihan berjalan dalam **Power BI Service / Fabric (pelayar)** — muat data ke **Lakehouse**, bina model & laporan dalam **Service**. Power BI Desktop ialah **pilihan luar talian** sahaja.
 
 ---
 
@@ -124,4 +124,4 @@ Seterusnya: [`03-power-query.md`](./03-power-query.md) — cara sebenar membersi
 - **[learn.microsoft.com/fabric/get-started/direct-lake-overview](https://learn.microsoft.com/fabric/get-started/direct-lake-overview)** — Direct Lake.
 - 📘 *Architecting Power BI Solutions in Microsoft Fabric* (Packt) — Bab 5 *Deciding on the Storage Mode* (ms 75–106); Bab 7 *Understanding Microsoft Fabric* (ms 125–153): Lakehouse ms 136, Data Warehouse ms 141, **Direct Lake ms 146–148**.
 
-> ⚠️ **Peringatan lesen:** Fabric penuh & **Copilot memerlukan kapasiti F64+ atau tenant yang telah didayakan Copilot**. Ini **bukan** ciri percuma — **sahkan konfigurasi lesen dengan pentadbir IT KKDW** sebelum merancang penggunaan meluas. Jika belum sedia, Power BI Desktop (percuma) mencukupi untuk seluruh kandungan kursus kecuali Copilot.
+> ⚠️ **Peringatan lesen:** Fabric penuh & **Copilot memerlukan kapasiti F64+ atau tenant yang telah didayakan Copilot**. Ini **bukan** ciri percuma — **sahkan konfigurasi lesen dengan pentadbir IT KKDW** sebelum merancang penggunaan meluas. Jika belum sedia, seluruh kursus (kecuali Copilot) masih berjalan dalam **Power BI Service / Fabric**, menggunakan **Q&A + visual AI percuma** sebagai ganti Copilot.

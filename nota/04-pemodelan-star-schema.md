@@ -73,20 +73,18 @@ Fakta_Projek[status]      →  Dim_Status[status]        (many-to-one)
 
 ## Date table — wajib untuk analisis masa
 
-Buat **jadual kalendar khusus** (Date table) supaya analisis mengikut tahun/tempoh dan fungsi **Time Intelligence** DAX (Hari 2) berfungsi betul:
+Buat **jadual kalendar khusus** (Date table) supaya analisis mengikut tahun/tempoh dan fungsi **Time Intelligence** DAX (Hari 2) berfungsi betul.
 
+> ⚠️ **Fabric DirectLake:** `KKDW_Model` **tidak menyokong** `CALENDAR()` (calculated table). Bina Date table sebagai **jadual Lakehouse** — jana via **Dataflow Gen2 `List.Dates(...)`** (lihat **hari-1 Latihan 5**). `CALENDAR()` di bawah hanya untuk model **Import** (Power BI Desktop).
+
+*(Rujukan Import sahaja:)*
 ```dax
 Dim_Tarikh =
 CALENDAR ( DATE ( 2015, 1, 1 ), DATE ( 2030, 12, 31 ) )
 ```
+Tambah lajur `Tahun = YEAR ( Dim_Tarikh[Date] )`.
 
-Kemudian tambah lajur `Tahun`:
-
-```dax
-Tahun = YEAR ( Dim_Tarikh[Date] )
-```
-
-Akhir sekali: **Modeling → Mark as Date Table**. Sambungkan `Fakta_Projek[tahun]` ke `Dim_Tarikh[Tahun]`.
+Akhir sekali, dalam **Model view (Power BI Service)**: **Mark as date table**, dan sambungkan `Projek_Program[tarikh_tahun]` ke `Dim_Tarikh[Date]`.
 
 > **Kenapa Date table sendiri, bukan medan tarikh dalam Fakta?** Ia memberi **satu barisan tarikh lengkap & bersambung** (termasuk tahun tanpa projek), yang diperlukan fungsi masa DAX. Guna medan tarikh mentah sahaja menyebabkan jurang & kiraan salah.
 

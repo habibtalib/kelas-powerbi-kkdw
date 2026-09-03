@@ -8,7 +8,7 @@
 
 **DAX (Data Analysis Expressions)** ialah bahasa formula Power BI. Ia seperti formula Excel, tetapi dengan satu perbezaan besar: DAX bekerja atas **jadual & relationships**, bukan sel individu.
 
-Dalam Excel, `=SUM(B2:B100)` merujuk **julat sel tertentu**. Dalam DAX, `SUM ( Fakta_Projek[belanja_janm] )` merujuk **seluruh lajur** — dan hasilnya berubah automatik mengikut konteks visual (negeri mana, tahun mana).
+Dalam Excel, `=SUM(B2:B100)` merujuk **julat sel tertentu**. Dalam DAX, `SUM ( MyProjek[Belanja] )` merujuk **seluruh lajur** — dan hasilnya berubah automatik mengikut konteks visual (negeri mana, tahun mana).
 
 > **Analogi KKDW:** satu measure DAX seperti **kalkulator pintar** yang tahu konteks. `Jumlah Belanja` menunjukkan jumlah keseluruhan pada kad, tetapi bila diletak dalam carta "ikut negeri", ia automatik kira **per negeri** — tanpa anda tulis formula berulang.
 
@@ -47,7 +47,7 @@ Setiap visual, slicer dan baris matriks menetapkan konteks penapis. **Inilah kua
 
 | Fungsi | Buat apa | Contoh |
 |--------|----------|--------|
-| `SUM`, `AVERAGE`, `COUNTROWS`, `DISTINCTCOUNT` | Agregat asas | `SUM(Fakta_Projek[belanja_janm])` |
+| `SUM`, `AVERAGE`, `COUNTROWS`, `DISTINCTCOUNT` | Agregat asas | `SUM(MyProjek[Belanja])` |
 | `CALCULATE` | **Ubah konteks penapis** | Kira jumlah untuk status tertentu sahaja |
 | `FILTER` | Tapis jadual mengikut syarat | Projek dengan varians < −10% |
 | `IF` / `SWITCH` | Logik bersyarat | Tetapkan Hijau/Kuning/Merah |
@@ -60,17 +60,17 @@ Setiap visual, slicer dan baris matriks menetapkan konteks penapis. **Inilah kua
 ## 6 measure teras KKDW — baris demi baris
 
 ```dax
-Jumlah Projek = COUNTROWS ( Fakta_Projek )
+Jumlah Projek = COUNTROWS ( Projek_Program )
 ```
 Kira bilangan baris (= bilangan projek) dalam konteks semasa. Ikut negeri → projek per negeri.
 
 ```dax
-Jumlah Peruntukan = SUM ( Fakta_Projek[peruntukan_disemak_janm] )
+Jumlah Peruntukan = SUM ( MyProjek[Peruntukan] )
 ```
 Jumlahkan lajur peruntukan yang disemak (JANM). Ini "berapa duit diperuntukkan".
 
 ```dax
-Jumlah Belanja = SUM ( Fakta_Projek[belanja_janm] )
+Jumlah Belanja = SUM ( MyProjek[Belanja] )
 ```
 Jumlahkan lajur perbelanjaan sebenar. Ini "berapa duit telah dibelanja".
 
@@ -86,7 +86,7 @@ Peratus peruntukan yang telah dibelanja. `DIVIDE` elak ralat jika peruntukan sif
 
 ```dax
 Projek Siap =
-CALCULATE ( [Jumlah Projek], Fakta_Projek[kategori_status] = "Siap" )
+CALCULATE ( [Jumlah Projek], Projek_Program[kategori_status] = "Siap" )
 ```
 `CALCULATE` **mengubah konteks** — kira `Jumlah Projek`, tetapi **hanya** untuk projek berstatus "Siap". Ini corak paling penting dalam DAX: *measure + syarat penapis*.
 

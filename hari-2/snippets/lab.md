@@ -1,16 +1,16 @@
 # Hari 2 — Lab Hands-On (SESI 6–10)
 
-Latihan membina **KPI (DAX)**, **visual**, **drill-down & peta**, dan **4 halaman dashboard**. Mula daripada `hari-1.pbix`; simpan sebagai `hari-2.pbix`.
+Latihan membina **KPI (DAX)**, **visual**, **drill-down & peta**, dan **4 halaman dashboard** — semua dalam **Power BI Service / Fabric (pelayar)** atas `KKDW_Model` (Hari 1). Perubahan **auto-simpan** dalam workspace (tiada fail `.pbix`).
 
 > 📎 **Rujukan kod:** [`measures.dax`](./measures.dax) (semua measure teras + time intelligence) · [`calculated-columns.dax`](./calculated-columns.dax) (kategori_status, Urutan Status, jadual Kalendar).
 
-> **Amalan penamaan measure:** letak semua measure dalam satu jadual `_Measures` (buat jadual kosong: **Enter Data** → namakan `_Measures`).
+> **Amalan penamaan measure:** letak semua measure dalam **satu jadual** (mis. `Projek_Program`) supaya mudah dicari. *(Nota: elak "Enter Data"/jadual kosong dalam model **DirectLake** — ia menukar mod jadual; letak measure pada jadual sedia ada.)*
 
 ---
 
 ## Latihan 6 — 8 Measure Teras
 
-Buat setiap measure: **Modeling → New Measure**, tampal, tekan Enter. *(Sesuaikan nama jadual/medan ikut model anda.)*
+Buat setiap measure: dalam **Power BI Service** → buka **`KKDW_Model` → Open data model** → klik kanan jadual → **New measure**, tampal, tekan Enter. *(Sesuaikan nama jadual/medan ikut model anda.)*
 
 **Tangkapan skrin — antaramuka penyunting laporan:** panel **Data** (7 jadual model `KKDW_Model`), galeri **Visualizations**, dan kanvas. *(Buat measure: Power BI Desktop → **Modeling → New measure**; Power BI Service → **Open semantic model → New measure**.)*
 
@@ -112,13 +112,13 @@ Buat 4 halaman (tab bawah). Tambah **Slicer** `kod_negeri`, `tahun`, `program` p
 - Column berkelompok: `Jumlah Peruntukan` vs `Jumlah Belanja` vs `Baki` ikut negeri
 - Scatter: `% Utilisasi` (x) vs `Purata Kemajuan Sebenar` (y) — kesan ketidakpadanan
 
-✅ **Semak & simpan:** navigasi antara 4 halaman lancar; slicer berfungsi merentas visual. **Save As `hari-2.pbix`**.
+✅ **Semak & simpan:** navigasi antara 4 halaman lancar; slicer berfungsi merentas visual. Laporan **auto-simpan** dalam workspace Fabric *(guna **Save a copy** jika mahu versi berasingan)*.
 
 ---
 
 ## Latihan 10 — Publish
 
-1. **Home → Publish** → pilih Workspace KKDW anda.
+1. Di **Power BI Service**, laporan sudah berada dalam workspace (auto-simpan) — klik **Save**, kemudian **Share** untuk kongsi. *(Power BI Desktop: Home → Publish → pilih Workspace.)*
 2. Buka Power BI Service (app.powerbi.com) → semak laporan naik.
 3. *(Jika ada kebenaran)* set **Scheduled refresh** & terokai **Row-Level Security** (Modeling → Manage roles: contoh peranan `Sabah` dengan filter `kod_negeri = "12"`).
 

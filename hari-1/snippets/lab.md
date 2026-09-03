@@ -57,7 +57,7 @@ flowchart LR
 3. Sahkan anda nampak **New item → Lakehouse / Dataflow Gen2** dalam workspace.
 4. *(Copilot — Hari 3)* sahkan tetapan tenant Copilot **On** — rujuk panduan pentadbir Fabric (disediakan semasa kelas).
 
-### Laluan B — Power BI Desktop · Windows sahaja
+### Laluan B (pilihan) — Power BI Desktop · Windows sahaja
 
 1. Pasang **Power BI Desktop** — **Microsoft Store** (cari "Power BI Desktop") atau [powerbi.microsoft.com/desktop](https://powerbi.microsoft.com/desktop/). *Percuma.*
 2. Buka → **Sign in** (kanan atas) dengan akaun organisasi KKDW.
@@ -196,7 +196,9 @@ flowchart TD
 *c) **New item** → cari "Dataflow" → pilih **Dataflow Gen2**:*
 ![Fabric New item: petak Dataflow Gen2](../img/step-df1-dataflow-gen2.jpg)
 
-### Laluan B — Power BI Desktop
+### Laluan B (pilihan) — Power BI Desktop
+
+*Kursus guna **Laluan A (Fabric/pelayar)**; Laluan B hanya untuk luar talian/Windows.*
 
 1. Buka **Power BI Desktop** → log masuk akaun organisasi KKDW.
 2. **Home → Get Data → Excel workbook** → pilih `data_jpd.xlsx`.
@@ -225,7 +227,7 @@ Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD
 
    | Lajur | Jenis data | Kenapa |
    |---|---|---|
-   | `kod_projek`, `kod_program`, `kod_negeri`, `kod_daerah`, `kod_parlimen`, `kod_dun` | **Text** | kod dengan sifar di hadapan rosak jika jadi nombor |
+   | `kod_projek`, `kod_negeri`, `kod_daerah`, `kod_parlimen`, `kod_dun` | **Text** | kod dengan sifar di hadapan rosak jika jadi nombor |
    | `nama_projek`, `status_pelaksanaan`, `jenis_projek` | **Text** | label / teks |
    | `kos_projek` | **Currency** (Fixed decimal) | nilai RM |
    | `panjang_jalan`, `jumlah_projek_peserta` | **Whole/Decimal Number** | untuk KPI (mis. Kos per KM) |
@@ -447,7 +449,7 @@ Namakan **`Dim_Tarikh`**; selepas Publish → dalam **Model view → klik jadual
 ✅ **Semak Langkah 1:** buka **`KKDW_Lakehouse` → Tables** — `Dim_Negeri`, `Dim_Agensi`, `Dim_Tarikh` sudah ada (bersama `Projek_Program` & `MyProjek`). **Barulah** teruskan ke Langkah 2.
 
 **Langkah 2 — Cipta & buka semantic model** *(buat SELEPAS semua jadual — fakta + dim — ada dalam Lakehouse):*
-- **a)** Dalam **`KKDW_Lakehouse`** → klik **New semantic model** *(butang di bar atas Lakehouse)* → nama **`KKDW_Model`** → **tanda jadual**: `Projek_Program`, `MyProjek`, `Dim_Negeri`, `Dim_Tarikh`, `Dim_Agensi` → **Confirm**. *(Kelima-lima kini ada dalam senarai kerana Dim sudah dibina di Langkah 1.)*
+- **a)** Dalam **`KKDW_Lakehouse`** → klik **New semantic model** *(butang di bar atas Lakehouse)* → nama **`KKDW_Model`** → **tanda 7 jadual**: `Projek_Program`, `MyProjek`, `JPD`, `BELB`, `Dim_Negeri`, `Dim_Tarikh`, `Dim_Agensi` → **Confirm**. *(Semua kini ada dalam senarai kerana Dim sudah dibina di Langkah 1.)*
 - **b)** Buka **`KKDW_Model`** → klik **Open data model** — inilah **Model view** dalam pelayar (kanvas jadual + garisan relationships + panel measures).
 - **c)** *Semua langkah di bawah dibuat di sini (Power BI Service / Fabric) — bukan Power BI Desktop.*
 
