@@ -47,6 +47,13 @@ Purata Kemajuan Sebenar = AVERAGE ( MyProjek[peratus_sebenar_projek] )
 
 ## Latihan 7 — Visual JPD & BELB
 
+**Cipta laporan & cara tambah visual (Power BI Service, pelayar):**
+- **a)** Dari **`KKDW_Model`** → klik **Create new report** *(atau Workspace → **New → Report** → pilih `KKDW_Model`)* → **report editor** terbuka dalam pelayar. *(Atau buka laporan sedia ada → **Edit**.)*
+- **b) Tambah visual:** dalam panel **Visualizations** (kanan) klik ikon **jenis visual** (Card, Bar/Column chart, Donut…) → visual **kosong** muncul di kanvas. *(Atau seret medan dari panel **Data** terus ke kanvas — auto-cipta visual.)*
+- **c) Isi medan:** dengan visual **dipilih**, **tanda kotak** medan dalam panel **Data**, atau seret medan ke telaga (well) **X-axis / Y-axis / Values / Legend**. Contoh Card → `Jumlah Projek`; Bar → `kod_negeri` (X) + `Jumlah Projek` (Y).
+- **d) Format & simpan:** ikon **berus (Format your visual)** → tajuk / warna / data labels → **Save** laporan.
+
+**Bina visual ini:**
 1. **Card row (atas):** `Jumlah Projek`, `Jumlah Peruntukan`, `Projek Siap`, `% Utilisasi`.
 2. **Bar chart:** *Axis* = `kod_negeri`, *Values* = `Jumlah Projek`. Isih menurun.
 3. **Column chart:** *Axis* = `kod_negeri`, *Values* = `Jumlah Peruntukan` / `Sum kos_projek`.
