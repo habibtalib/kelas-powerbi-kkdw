@@ -302,11 +302,32 @@ Untuk laporan Kewangan (Hari 2), cantum medan kewangan MyProjek ke `Projek_Progr
 
 ### 4C (Lanjutan) — Unpivot: kewangan ikut tahun
 
-Medan kewangan MyProjek dipecah *wide* (`..._tahun_1` … `..._tahun_5`). Untuk analisis trend tahunan (satu baris = projek × tahun):
+**Masalah:** MyProjek simpan kewangan secara *wide* — satu lajur bagi setiap tahun projek: `peruntukan_disemak_janm_tahun_1`, `..._tahun_2`, … `..._tahun_5`. Susah untuk jumlah/tapis ikut tahun. **Unpivot** memutar lajur-lajur ini jadi *long* (satu baris per tahun):
 
-1. Pilih lajur `peruntukan_disemak_janm_tahun_1` … `_tahun_5` (tahan **Ctrl**).
-2. **Transform → Unpivot Columns**.
-3. Hasil: lajur **Attribute** (nama tahun) + **Value** (RM). Guna **Transform → Extract → Last Characters** pada *Attribute* untuk dapatkan nombor tahun.
+*Sebelum (wide) — 1 baris/projek:*
+
+| kod_projek | ..._tahun_1 | ..._tahun_2 | … |
+|---|---|---|---|
+| P001 | 10,000 | 12,000 | … |
+
+*Selepas (long) — 5 baris/projek:*
+
+| kod_projek | Tahun | Peruntukan |
+|---|---|---|
+| P001 | 1 | 10,000 |
+| P001 | 2 | 12,000 |
+
+**Langkah:**
+1. Pilih lajur `peruntukan_disemak_janm_tahun_1` … `_tahun_5` (klik lajur pertama, tahan **Shift**, klik lajur ke-5).
+2. Klik kanan lajur terpilih → **Unpivot Columns** *(atau **Transform → Unpivot Columns**)*.
+3. Terhasil **2 lajur baharu**: **`Attribute`** = **nama lajur penuh** (mis. `peruntukan_disemak_janm_tahun_1`), **`Value`** = jumlah RM.
+4. **Dapatkan nombor tahun** dari `Attribute`: **Transform → Extract → Last Characters → `1`** → tinggal `1`,`2`,…`5`. **Rename** lajur: `Attribute` → **`Tahun`**, `Value` → **`Peruntukan`**.
+   > ⚠️ **Inilah yang mengelirukan:** `_tahun_1..5` bermaksud **tahun projek (Tahun 1–5)** — *bukan* tahun kalendar (2021, dsb). Jadi "1" = tahun **pertama** projek itu. (Jika perlu tahun sebenar, kira dari `tahun_mula` + Tahun − 1.)
+5. Set jenis: `Tahun` → **Whole Number**, `Peruntukan` → **Currency**.
+
+✅ **Semak:** setiap projek kini ada **5 baris** (Tahun 1–5); senang `SUM(Peruntukan)` ikut Tahun.
+
+> **Belanja serupa:** ulang untuk `belanja_janm_tahun_1..5` (query berasingan) jika mahu banding **peruntukan vs belanja** ikut tahun.
 
 > **Enable load:** query perantara (mis. senarai negeri mentah) boleh dimatikan — klik kanan query → nyahtanda **Enable load** — supaya ia bukan jadual berasingan dalam model.
 
