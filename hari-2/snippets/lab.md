@@ -63,6 +63,8 @@ Purata Kemajuan Sebenar = AVERAGE ( MyProjek[peratus_sebenar_projek] )
 - **c) Isi medan:** dengan visual **dipilih**, **tanda kotak** medan dalam panel **Data**, atau seret medan ke telaga (well) **X-axis / Y-axis / Values / Legend**. Contoh Card → `Jumlah Projek`; Bar → `kod_negeri` (X) + `Jumlah Projek` (Y).
 - **d) Format & simpan:** ikon **berus (Format your visual)** → tajuk / warna / data labels → **Save** laporan.
 
+> ⚠️ **Tajuk visual auto jadi English?** (mis. *"Sum of jumlah_projek_peserta by kod_negeri"*) — itu **tajuk auto**; perkataan `Sum of` / `by` ikut **bahasa laporan** (default English) dan Malay tak dilokalkan. **Betulkan:** pilih visual → **Format → General → Title** → **matikan toggle auto** → taip tajuk Melayu (mis. *"Jumlah Projek mengikut Negeri"*). Juga **rename** medan/measure ke Melayu, dan set **tajuk paksi** (X/Y axis → Title) dalam Melayu. *(Untuk format tarikh/nombor Melayu: set bahasa laporan / culture model `ms-MY`.)*
+
 **Bina visual ini:**
 1. **Card row (atas):** `Jumlah Projek`, `Jumlah Peruntukan`, `Projek Siap`, `% Utilisasi`.
 2. **Bar chart:** *Axis* = `kod_negeri`, *Values* = `Jumlah Projek`. Isih menurun.
