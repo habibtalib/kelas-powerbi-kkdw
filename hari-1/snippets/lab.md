@@ -215,6 +215,8 @@ flowchart TD
 
 Sama untuk kedua-dua laluan (Power Query Online atau Desktop). Untuk query **JPD**:
 
+> **Di mana ini berlaku?** Pembersihan ini dibuat **dalam Dataflow Gen2 (Power Query Online)** — *bukan* dalam Lakehouse. Aliran: **Lakehouse Files (mentah) → Dataflow / Power Query (bersih, Latihan 3) → Lakehouse Tables (bersih, selepas Publish)**. Laluan B: Power Query yang sama dalam **Power BI Desktop**. *(Laluan CSV → Load to Tables tidak lalu Power Query — bersih kemudian dalam model/dataflow.)*
+
 > **Konsep — Query sebagai resipi:** setiap query ialah senarai **Applied Steps** (auto-jana: *Source → Navigation → Promoted headers → Changed Type*). Klik mana-mana langkah untuk lihat data pada peringkat itu — boleh edit, susun semula, atau buang (**X**). Di sebalik tabir, setiap langkah = satu baris kod **M**; satu **Refresh** jalankan semula **semua** langkah automatik. Sebab itu kita bersih di sini, **bukan** dalam Excel.
 
 1. **Naikkan header betul:** pastikan baris tajuk sebenar dinaikkan (**Home → Use First Row as Headers**). *Punca #1 ralat "Changed column type" ialah header salah dinaikkan.*
