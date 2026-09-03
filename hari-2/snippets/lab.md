@@ -51,6 +51,8 @@ Purata Kemajuan Sebenar = AVERAGE ( MyProjek[peratus_sebenar_projek] )
 
 ✅ **Semak:** letak `Jumlah Projek` pada satu **Card** → nombor betul (contoh JPD+BELB ≈ 1,399).
 
+> 💡 **Copilot boleh bantu jana measure** *(pecutan pilihan — sesi penuh Hari 3)*: dalam Power BI Service (Copilot-enabled) → **DAX query view → Copilot**, mis. *"Cipta measure Kos per KM = jumlah kos_projek ÷ jumlah panjang_jalan"*. Perlu **F64+/lesen Copilot**; **sahkan setiap baris DAX** (ingat skala 0–100). Set prompt Copilot penuh disediakan semasa kelas (Hari 3).
+
 ---
 
 ## Latihan 7 — Visual JPD & BELB
@@ -69,6 +71,8 @@ Purata Kemajuan Sebenar = AVERAGE ( MyProjek[peratus_sebenar_projek] )
 5. **Conditional Formatting:** pada visual matriks `% Utilisasi`, **Format → Cell elements → Background color → f(x)** → skala warna (merah = tinggi).
 
 ✅ **Semak:** warna status seragam sepanjang halaman (Hijau=Siap, Kuning=Dalam Pelaksanaan).
+
+> 💡 **Copilot boleh jana visual/halaman** *(pecutan pilihan — sesi penuh Hari 3)*: **Copilot → Create a new report page**, mis. *"Cipta halaman ringkasan eksekutif: kad Jumlah Projek, % Utilisasi + bar ikut negeri + donut ikut kategori_status"*. Perlu **F64+/lesen Copilot**; **sentiasa semak measure & penapis** output. Set prompt Copilot penuh disediakan semasa kelas (Hari 3).
 
 **Tangkapan skrin — bar chart `Jumlah Projek` mengikut `kod_negeri`** (X-axis = `kod_negeri`, Y-axis = `Jumlah Projek`; paparan **Focus mode**):
 
