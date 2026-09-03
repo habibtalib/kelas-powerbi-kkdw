@@ -362,8 +362,11 @@ MyProjek ada **beberapa** kumpulan `_tahun_1..5` (mis. `peruntukan_disemak_janm_
    `https://onelake.dfs.fabric.microsoft.com/<workspace>/<lakehouse>.Lakehouse/Files/akaun/`
    → **navigate** → ia senaraikan semua fail dalam folder. *(Atau **Get data → SharePoint folder** jika fail asal di SharePoint.)*
 3. Power Query papar senarai fail (lajur `Name`, `Extension`, `Folder Path`, **`Content`**). **Tapis** `Extension` = `.xlsx` dan buang fail sementara (`~$…`).
-4. Klik ikon **Combine files** (dua anak panah ⤓ pada lajur **`Content`**) → **Combine & Transform Data** → pilih **`Sheet1`** → **OK**.
-   *Power Query auto-jana:* `Sample File` + fungsi **Transform File** + query gabungan — **semua baris semua tahun ditindan jadi satu jadual**.
+4. Klik **header lajur `Content`** (mesti jenis **Binary**) → ikon **Combine files** (⤓) hidup → **Combine & Transform Data** → pilih **`Sheet1`** → **OK**. *Power Query auto-jana `Sample File` + fungsi Transform File + query gabungan — semua baris semua tahun ditindan jadi satu jadual.*
+   > ⚠️ **Ikon Combine kelabu?** Ia hanya hidup bila (a) langkah 3 sudah dibuat (hanya baris `.xlsx` tinggal) **dan** (b) **lajur `Content` (Binary) dipilih**. Di **Dataflow Gen2 (ADLS Gen2/OneLake)** butang ini kadang **tetap kelabu** — buat **manual (pasti jadi)**:
+   > - **Add column → Custom Column** → nama `Data`, formula `Excel.Workbook([Content], true)`.
+   > - Klik **⤢ Expand** pada lajur `Data` → tanda `Data` + `Kind` → **OK**.
+   > - **Tapis** `Kind = "Sheet"` → **Expand** lajur `Data` (nested) sekali lagi → **Use First Row as Headers**. *(Hasil sama — semua fail ditindan.)*
 5. **Ambil tahun dari nama fail:** pada lajur **`Source.Name`**, **Add Column → Column From Examples** (atau **Extract / Split** ikut `_`/`.`) → lajur **`tahun`** (4 digit) → jenis **Whole Number**.
 6. Bersih & set jenis data seperti **Latihan 3** (Promote Headers, jenis, Trim/UPPERCASE).
 
