@@ -382,10 +382,38 @@ flowchart TB
 - **b)** Buka **`KKDW_Model`** → klik **Open data model** — inilah **Model view** dalam pelayar (kanvas jadual + garisan relationships + panel measures).
 - **c)** *Semua langkah di bawah dibuat di sini (Power BI Service / Fabric) — bukan Power BI Desktop.*
 
-1. **Jadual dimensi** — dalam Fabric ini ialah **jadual Lakehouse** (bukan DAX *calculated table*, kerana model **DirectLake**). Sediakan semasa integrasi:
-   - **`Dim_Negeri`** — senarai negeri unik (gabungan `kod_negeri` JPD/BELB + `negeri` MyProjek, dinormalkan; mis. `N.SEMBILAN` → `NEGERI SEMBILAN`). 16 negeri.
-   - **`Dim_Tarikh`** — Date table 2017–2028 sebagai **jadual Lakehouse** *(DirectLake tak sokong `CALENDAR()`)*. Jana ringkas via **Dataflow Gen2**: `Source = List.Dates(#date(2017,1,1), 4383, #duration(1,0,0,0))` → **To Table** → tambah `Tahun = Date.Year([Date])` → tulis ke Lakehouse. Kemudian dalam Model view → **Mark as date table**.
-   - **`Dim_Agensi`** — senarai agensi unik dari `agensi_pemilik` / `agensi_pelaksana_utama` (MyProjek). 15 agensi.
+1. **Sediakan 3 jadual dimensi** — dalam Fabric ia ialah **jadual Lakehouse** (bukan DAX *calculated table* — model **DirectLake**). Bina dalam **Dataflow Gen2 (Power Query Online)**; setiap query set **Data destination → `KKDW_Lakehouse`** kemudian **Publish**.
+
+**`Dim_Negeri`** — senarai negeri unik (kunci: `kod_negeri`):
+- Klik kanan query **`Projek_Program` → Reference** → namakan **`Dim_Negeri`**.
+- Pilih lajur `kod_negeri` → **Home → Remove Other Columns** (buang semua lajur lain).
+- **Transform → Format → Trim** & **UPPERCASE**; **Replace Values** jika perlu (mis. `N.SEMBILAN` → `NEGERI SEMBILAN`).
+- Klik kanan lajur → **Remove Duplicates** → ~16 baris unik.
+- *(Nak sertakan `negeri` MyProjek juga: Reference `MyProjek` → `negeri` → **Home → Append queries** dengan Dim_Negeri → Remove Duplicates.)*
+
+**`Dim_Agensi`** — senarai agensi unik (kunci: `agensi`):
+- Klik kanan **`MyProjek` → Reference** → namakan **`Dim_Agensi`**.
+- Pilih `agensi_pemilik` → **Remove Other Columns** → klik kanan lajur → **Rename** → `agensi`.
+- **Trim** → **Remove Duplicates** → ~15 baris.
+
+**`Dim_Tarikh`** — Date table 2017–2028 (**Get data → Blank query → Advanced Editor**, tampal):
+
+```m
+let
+    Source = List.Dates(#date(2017,1,1), 4383, #duration(1,0,0,0)),
+    Jadual = Table.FromList(Source, Splitter.SplitByNothing(), {"Date"}),
+    Jenis  = Table.TransformColumnTypes(Jadual, {{"Date", type date}}),
+    Tahun  = Table.AddColumn(Jenis, "Tahun",  each Date.Year([Date]),  Int64.Type),
+    Bulan  = Table.AddColumn(Tahun, "Bulan",  each Date.Month([Date]), Int64.Type),
+    NamaBln = Table.AddColumn(Bulan, "NamaBulan", each Date.MonthName([Date]), type text)
+in
+    NamaBln
+```
+
+Namakan **`Dim_Tarikh`**; selepas Publish → dalam **Model view → klik jadual → Mark as date table** (lajur `Date`).
+
+> **Semua 3 query:** pastikan **Data destination = `KKDW_Lakehouse`** sebelum **Publish**. Selepas refresh, jadual muncul di **Lakehouse → Tables**, dan tarik masuk ke `KKDW_Model` (Langkah 0) jika belum ada.
+
 2. **Relationships** (dalam **Model view** yang dibuka di Langkah 0) — **seret** lajur dari jadual **fakta** dan lepas di atas lajur padanan dalam jadual **dimensi**. Fabric kesan *cardinality* automatik; sahkan dalam dialog:
 
    | Seret (fakta) | Lepas di (dimensi) | Cardinality | Arah penapis |
