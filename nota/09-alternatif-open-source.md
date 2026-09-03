@@ -15,9 +15,10 @@
 |---|---|---|
 | **OneLake / Lakehouse / Warehouse** | Simpan + query data | **ClickHouse** (OLAP columnar, sangat pantas) · DuckDB · PostgreSQL · Delta/Iceberg + **MinIO** (storan S3) |
 | **Enjin query / SQL analytics** | SQL merentas data besar | **ClickHouse** · **Trino/Presto** · Apache Doris · DuckDB |
-| **Dataflow Gen2 / Power Query** | Transform (ETL/ELT) | **dbt** (transform SQL) · **Airbyte** (ingest) · Apache **Airflow**/Dagster (jadual) · Apache NiFi |
+| **Dataflow Gen2 / Power Query** | Transform (ETL/ELT) | **dbt** (transform SQL) · **Airbyte** (ingest) · Apache **Airflow**/Dagster (jadual) · **n8n** (workflow ingest/orkestrasi) · Apache NiFi |
 | **Power BI (visualisasi)** | Dashboard & laporan | **Apache Superset** · **Metabase** · **Grafana** · Redash · Lightdash |
-| **Copilot / NL Q&A / jana DAX** | AI atas data | LLM sumber terbuka + **text-to-SQL** (Vanna.ai, Dataherald) · Superset/Metabase + LLM |
+| **Copilot / NL Q&A / jana DAX** | AI atas data | LLM sumber terbuka + **text-to-SQL** (Vanna.ai, Dataherald) · **n8n AI Agent** (nod LLM) · Superset/Metabase + LLM |
+| **Power Automate / Data Alerts / Subscriptions** | Automasi & amaran | **n8n** (workflow: amaran ke email/Teams/WhatsApp, edaran laporan berjadual, write-back) |
 | **Microsoft Entra (identiti)** | Log masuk / SSO | **Keycloak** |
 
 ## ClickHouse — teras alternatif on-prem
@@ -42,6 +43,15 @@ flowchart LR
 | **Grafana** | Siri masa, pemantauan, peta | Terbaik untuk ops/real-time; kurang ad-hoc BI |
 
 *Untuk pengalaman paling dekat Power BI (dashboard perniagaan, drill, RLS), **Apache Superset** ialah pilihan utama; **ClickHouse + Superset** ialah gabungan self-hosted paling popular.*
+
+## n8n — automasi & orkestrasi ("gam" antara lapisan)
+
+**n8n** ialah alat **workflow automation** sumber terbuka (layan-sendiri, seperti Zapier/Make) — ia **bukan** storan atau visual, tetapi **penghubung**:
+- **Ingest/ETL:** tarik data dari API / Google Sheets / DB / fail → transform → muat ke **ClickHouse/Postgres** (berjadual atau *event-driven*) — melengkapi/ganti sebahagian **Dataflow Gen2 / pipeline**.
+- **Automasi & amaran (kekuatan utama):** ganti **Power Automate + Data Alerts** — mis. *"Status Risiko projek jadi Merah → hantar email/Teams/WhatsApp"*, edaran laporan berjadual, write-back ke sistem sumber.
+- **AI:** nod **AI Agent / LLM** boleh buat NL Q&A / **text-to-SQL** atas ClickHouse & ringkasan automatik — sebahagian peranan Copilot.
+
+> Corak lazim: **n8n** (ingest + automasi + amaran) → **ClickHouse** (simpan/query) → **Superset** (dashboard). n8n mengisi lapisan *orkestrasi/automasi* yang Fabric buat melalui Data Factory pipelines + Power Automate.
 
 ## Batasan / kos tersembunyi
 
