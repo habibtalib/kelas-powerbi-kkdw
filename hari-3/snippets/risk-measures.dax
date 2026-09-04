@@ -1,0 +1,82 @@
+// risk-measures.dax
+// Sukatan analitik risiko & kecekapan untuk halaman "AI Project Risk & Early Warning".
+// Cara guna: klik kanan jadual "MyProjek" (atau _Measures) > New measure, tampal satu sukatan.
+//
+// ⚠️ SKALA DATA: dalam data sebenar KKDW, `peratus_jadual_projek` & `peratus_sebenar_projek`
+// ialah 0–100 (BUKAN 0–1). Sebab itu ambang risiko di sini guna -5 / -10 (mata peratus),
+// bukan -0.05 / -0.10. Jika model anda simpan peratus sebagai 0–1, tukar semula ke -0.05/-0.10.
+//
+// Sepadan dengan model DirectLake **KKDW_Model** (Fabric): jadual MyProjek, Projek_Program
+// (JPD∪BELB, lajur `program`, `kategori_status`), Dim_Negeri, Dim_Tarikh, Dim_Agensi.
+// Nota: `lat/long` kosong dalam sumber → peta ikut negeri sahaja (bukan titik).
+
+// ---------- Early Warning: varians jadual vs sebenar (skala 0–100) ----------
+
+Varians Kemajuan =
+AVERAGE ( MyProjek[peratus_sebenar_projek] )
+    - AVERAGE ( MyProjek[peratus_jadual_projek] )
+
+// Indikator risiko: Hijau (0..-5) / Kuning (-5..-10) / Merah (<-10) — mata peratus
+Status Risiko =
+SWITCH (
+    TRUE (),
+    [Varians Kemajuan] >= -5, "Hijau",
+    [Varians Kemajuan] >= -10, "Kuning",
+    "Merah"
+)
+
+// Bilangan projek ikut warna (untuk KPI cards)
+Projek Merah =
+CALCULATE ( COUNTROWS ( MyProjek ), FILTER ( MyProjek,
+    ( MyProjek[peratus_sebenar_projek] - MyProjek[peratus_jadual_projek] ) < -10 ) )
+
+Projek Kuning =
+CALCULATE ( COUNTROWS ( MyProjek ), FILTER ( MyProjek,
+    VAR v = MyProjek[peratus_sebenar_projek] - MyProjek[peratus_jadual_projek]
+    RETURN v >= -10 && v < -5 ) )
+
+
+// ---------- Project Risk Score ----------
+// Gabung faktor lewat + kadar belanja melebihi kemajuan fizikal.
+// Nota: [% Utilisasi] ialah nisbah 0–1; [Purata Kemajuan Sebenar] ialah 0–100 →
+// darab Utilisasi dengan 100 sebelum banding, dan guna +20 (mata peratus).
+
+Risk Score =
+VAR VarLewat =
+    SWITCH ( TRUE (), [Varians Kemajuan] < -10, 2, [Varians Kemajuan] < -5, 1, 0 )
+VAR VarBelanja =
+    IF ( [% Utilisasi] * 100 > [Purata Kemajuan Sebenar] + 20, 2, 0 )
+RETURN
+    VarLewat + VarBelanja
+
+
+// ---------- Kecekapan kos ----------
+// Guna jadual bersepadu Projek_Program (dinormalkan) supaya konsisten dengan Dim_Negeri.
+// (Boleh juga guna jadual mentah JPD / BELB jika ada dalam model.)
+
+Kos per KM =
+DIVIDE (
+    CALCULATE ( SUM ( Projek_Program[kos_projek] ), Projek_Program[program] = "JPD" ),
+    CALCULATE ( SUM ( Projek_Program[panjang_jalan] ), Projek_Program[program] = "JPD" )
+)
+
+Kos per Sambungan =
+DIVIDE (
+    CALCULATE ( SUM ( Projek_Program[kos_projek] ), Projek_Program[program] = "BELB" ),
+    CALCULATE ( SUM ( Projek_Program[jumlah_projek_peserta] ), Projek_Program[program] = "BELB" )
+)
+// Benchmark indikatif kos jalan ~RM9-11 juta/km — panduan awal sahaja,
+// ambil kira geografi, skop & keadaan tapak sebelum kesimpulan.
+// (Dalam set latihan ini nilai mungkin tidak realistik — data sintetik.)
+
+
+// ---------- Priority Index (asas) ----------
+// Keutamaan = risiko tinggi + penerima manfaat ramai + kemajuan rendah.
+// KemajuanRendah guna < 50 (skala 0–100). Sesuaikan pemberat mengikut dasar KKDW.
+
+Priority Index =
+VAR Risiko = [Risk Score]                                  // 0..4
+VAR Manfaat = DIVIDE ( SUM ( Projek_Program[jumlah_projek_peserta] ), 1000 )
+VAR KemajuanRendah = IF ( [Purata Kemajuan Sebenar] < 50, 1, 0 )
+RETURN
+    Risiko + Manfaat + KemajuanRendah
